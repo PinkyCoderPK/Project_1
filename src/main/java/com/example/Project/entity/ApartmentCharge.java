@@ -16,12 +16,12 @@ public class ApartmentCharge {
     String id;
     String apartmentId;
     String chargeId;
-    double totalAmount;
-    double unitAmount;
+    Double totalAmount;
+    Double unitAmount;
     String unitMeasurement;
-    double unitQuantity;
-    double amountPaid;
-    double amountDue;
+    Double unitQuantity;
+    Double amountPaid;
+    Double amountDue;
     LocalDateTime chargeDate;
     LocalDateTime dueDate;
     String status;

@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 public class ApartmentChargeRequest {
     String apartmentId;
     String chargeId;
-    double unitAmount;
+    Double unitAmount;
     String unitMeasurement;
-    double unitQuantity;
-    double amountPaid;
-    double amountDue;
+    Double unitQuantity;
+    Double amountPaid;
+    Double amountDue;
     LocalDateTime chargeDate;
     LocalDateTime dueDate;
     String status;

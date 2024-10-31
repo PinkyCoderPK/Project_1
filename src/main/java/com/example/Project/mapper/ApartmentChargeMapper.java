@@ -6,10 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import java.util.Optional;
-
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ApartmentChargeMapper {
     ApartmentCharge  toApartmentCharge(ApartmentChargeRequest request);
-    void updateApartmentCharge(@MappingTarget ApartmentCharge apartmentCharge, ApartmentChargeRequest request);
+    void mapApartmentCharge(@MappingTarget ApartmentCharge apartmentCharge, ApartmentChargeRequest request);
 }

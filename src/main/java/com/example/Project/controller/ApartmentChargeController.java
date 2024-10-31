@@ -30,13 +30,23 @@ public class ApartmentChargeController {
         return apartmentChargeService.getById(id);
     }
 
-    @GetMapping("/apartment/{apartmentId}")
-    public List<ApartmentCharge> getByApartmentId(@PathVariable String apartmentId) {
-        return apartmentChargeService.getByApartmentId(apartmentId);
+    @GetMapping("/search")
+    public List<ApartmentCharge> search(@RequestBody ApartmentChargeRequest request) {
+        return apartmentChargeService.search(request);
     }
 
     @PatchMapping("/{id}")
     public ApartmentCharge updateById (@PathVariable String id, @RequestBody ApartmentChargeRequest request) {
         return apartmentChargeService.updateById(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable String id) {
+        apartmentChargeService.deleteById(id);
+    }
+
+    @DeleteMapping
+    public void deleteAll() {
+        apartmentChargeService.deleteAll();
     }
 }
