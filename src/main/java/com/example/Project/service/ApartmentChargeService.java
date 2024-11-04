@@ -1,6 +1,8 @@
 package com.example.Project.service;
 
-import com.example.Project.dto.request.ApartmentChargeRequest;
+import com.example.Project.dto.request.ApartmentChargeCreateRequest;
+import com.example.Project.dto.request.ApartmentChargeSearchRequest;
+import com.example.Project.dto.request.ApartmentChargeUpdateRequest;
 import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.mapper.ApartmentChargeMapper;
 import com.example.Project.repository.ApartmentChargeRepository;
@@ -10,6 +12,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import jakarta.validation.Valid;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Data
 @Service
@@ -31,7 +33,7 @@ public class ApartmentChargeService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public ApartmentCharge create(ApartmentChargeRequest request) {
+    public ApartmentCharge create(ApartmentChargeCreateRequest request) {
         ApartmentCharge apartmentCharge = apartmentChargeMapper.toApartmentCharge(request);
         return apartmentChargeRepository.save(apartmentCharge);
     }
@@ -40,13 +42,15 @@ public class ApartmentChargeService {
         return apartmentChargeRepository.findAll();
     }
 
-    public Optional<ApartmentCharge> getById(String id) {
-        return apartmentChargeRepository.findById(id);
+    public ApartmentCharge getById(String id) {
+        return apartmentChargeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy thông tin phí của hộ chung cư"));
     }
 
-    public List<Predicate> _createPredicates(ApartmentChargeRequest request, CriteriaBuilder criteriaBuilder, Root<ApartmentCharge> root ) {
+    // Tổng hợp các điều kiện truy vấn
+    public List<Predicate> _createPredicates(ApartmentChargeSearchRequest request, CriteriaBuilder criteriaBuilder, Root<ApartmentCharge> root ) {
         List<Predicate> predicates = new ArrayList<>();
-        for(Field field : ApartmentChargeRequest.class.getDeclaredFields()) {
+        for(Field field : ApartmentChargeSearchRequest.class.getDeclaredFields()) {
             field.setAccessible(true);
             try {
                 Object value = field.get(request);
@@ -55,20 +59,25 @@ public class ApartmentChargeService {
                 }
             }
             catch (IllegalAccessException e) {
-                e.printStackTrace();
+                throw new RuntimeException("Thất bại trong truy cập trường: " + field.getName());
             }
         }
         return predicates;
     }
 
-    public List<ApartmentCharge> search(ApartmentChargeRequest request) {
+    public List<ApartmentCharge> search(@Valid ApartmentChargeSearchRequest request) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        // Xac dinh kieu tra ve
+
+        // Xác định kiểu đối tượng trả về
         CriteriaQuery<ApartmentCharge> query = criteriaBuilder.createQuery(ApartmentCharge.class);
-        // Xau dung cac dieu kien loc
+
+        // Đối tượng root đại diện cho bảng ApartmentCharge, cho phép truy cập vào các trường của bảng
         Root<ApartmentCharge> root = query.from(ApartmentCharge.class);
+
+        // Danh sách các điều kiện truy vấn
         List<Predicate> predicates = _createPredicates(request, criteriaBuilder, root);
 
+        // Thực hiện truy vấn
         query.select(root).where(predicates.toArray(new Predicate[0]));
 
         return entityManager.createQuery(query).getResultList();
@@ -82,15 +91,9 @@ public class ApartmentChargeService {
         apartmentChargeRepository.deleteAll();
     }
 
-    public ApartmentCharge updateById(String id, ApartmentChargeRequest request) {
-        Optional<ApartmentCharge> optionalApartmentCharge = getById(id);
-
-        if (optionalApartmentCharge.isPresent()) {
-            ApartmentCharge apartmentCharge = optionalApartmentCharge.get();
-            apartmentChargeMapper.mapApartmentCharge(apartmentCharge, request);
-
-            return apartmentChargeRepository.save(apartmentCharge);
-        }
-        else throw new RuntimeException("ApartmentCharge not found with id: " + id);
+    public ApartmentCharge updateById(String id, ApartmentChargeUpdateRequest request) {
+        ApartmentCharge apartmentCharge = getById(id);
+        apartmentChargeMapper.mapApartmentCharge(apartmentCharge, request);
+        return apartmentChargeRepository.save(apartmentCharge);
     }
 }
