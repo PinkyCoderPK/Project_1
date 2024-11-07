@@ -56,17 +56,31 @@ public class ApartmentChargeController {
     }
 
     @PatchMapping("/{id}")
-    public ApartmentCharge updateById (@PathVariable String id, @RequestBody @Valid ApartmentChargeUpdateRequest request) {
-        return apartmentChargeService.updateById(id, request);
+    public ApiResponse<ApartmentCharge> updateById (@PathVariable String id, @RequestBody @Valid ApartmentChargeUpdateRequest request) {
+        return ApiResponse.<ApartmentCharge>builder()
+                .code(HttpStatus.OK.value())
+                .message("Thành công")
+                .result(apartmentChargeService.updateById(id, request))
+                .build();
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable String id) {
+    public ApiResponse<Void> deleteById(@PathVariable String id) {
         apartmentChargeService.deleteById(id);
+        return ApiResponse.<Void>builder()
+                .code(HttpStatus.OK.value())
+                .message("Thành công")
+                .result(null)
+                .build();
     }
 
     @DeleteMapping
-    public void deleteAll() {
+    public ApiResponse<Void> deleteAll() {
         apartmentChargeService.deleteAll();
+        return ApiResponse.<Void>builder()
+                .code(HttpStatus.OK.value())
+                .message("Thành công")
+                .result(null)
+                .build();
     }
 }
