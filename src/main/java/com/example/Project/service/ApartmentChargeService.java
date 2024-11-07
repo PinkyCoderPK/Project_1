@@ -1,8 +1,8 @@
 package com.example.Project.service;
 
-import com.example.Project.dto.request.ApartmentChargeCreateRequest;
-import com.example.Project.dto.request.ApartmentChargeSearchRequest;
-import com.example.Project.dto.request.ApartmentChargeUpdateRequest;
+import com.example.Project.dto.request.apartmentCharge.ApartmentChargeCreateRequest;
+import com.example.Project.dto.request.apartmentCharge.ApartmentChargeSearchRequest;
+import com.example.Project.dto.request.apartmentCharge.ApartmentChargeUpdateRequest;
 import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.mapper.ApartmentChargeMapper;
 import com.example.Project.repository.ApartmentChargeRepository;

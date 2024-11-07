@@ -1,19 +1,17 @@
 package com.example.Project.controller;
 
-import com.example.Project.dto.request.ApartmentChargeCreateRequest;
-import com.example.Project.dto.request.ApartmentChargeSearchRequest;
-import com.example.Project.dto.request.ApartmentChargeUpdateRequest;
+import com.example.Project.dto.request.apartmentCharge.ApartmentChargeCreateRequest;
+import com.example.Project.dto.request.apartmentCharge.ApartmentChargeSearchRequest;
+import com.example.Project.dto.request.apartmentCharge.ApartmentChargeUpdateRequest;
 import com.example.Project.dto.response.ApiResponse;
 import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.service.ApartmentChargeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/project/apartmentCharge")
