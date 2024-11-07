@@ -1,4 +1,4 @@
-package com.example.Project.dto.request;
+package com.example.Project.dto.request.apartmentCharge;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;

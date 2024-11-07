@@ -1,6 +1,6 @@
 package com.example.Project.mapper;
 
-import com.example.Project.dto.request.ApartmentChargeCreateRequest;
+import com.example.Project.dto.request.apartmentCharge.ApartmentChargeCreateRequest;
 import com.example.Project.entity.ApartmentCharge;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
