@@ -22,9 +22,15 @@ public class Apartment {
     private String ownerId;
     private String status;
     private LocalDateTime createdAt;
+    private LocalDateTime updateAt;
 
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+    }
+
+    @PrePersist
+    protected void onUpdate() {
+        updateAt = LocalDateTime.now();
     }
 }
