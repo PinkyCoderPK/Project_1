@@ -3,8 +3,10 @@ package com.example.Project.controller;
 import com.example.Project.dto.request.apartment.ApartmentCreateRequest;
 import com.example.Project.dto.request.apartment.ApartmentSearchRequest;
 import com.example.Project.dto.request.apartment.ApartmentUpdateRequest;
+import com.example.Project.dto.request.apartmentCharge.ApartmentChargeUpdateRequest;
 import com.example.Project.dto.response.ApiResponse;
 import com.example.Project.entity.Apartment;
+import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.service.ApartmentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -47,16 +49,30 @@ public class ApartmentController {
                 .build();
     }
     @PatchMapping("/{id}")
-    public Apartment updateById(@PathVariable String id, @RequestBody @Valid ApartmentUpdateRequest apartmentUpdateRequest) {
-        return apartmentService.updateById(id, apartmentUpdateRequest);
+    public ApiResponse<Apartment> updateById (@PathVariable String id, @RequestBody @Valid ApartmentUpdateRequest request) {
+        return ApiResponse.<Apartment>builder()
+                .code(HttpStatus.OK.value())
+                .message("Thành công")
+                .result(apartmentService.updateById(id, request))
+                .build();
     }
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable String id) {
+    public ApiResponse<Void> deleteById(@PathVariable String id) {
         apartmentService.deleteById(id);
+        return ApiResponse.<Void>builder()
+                .code(HttpStatus.OK.value())
+                .message("Thành công")
+                .result(null)
+                .build();
     }
     @DeleteMapping
-    public void deleteAll(){
+    public ApiResponse<Void> deleteAll() {
         apartmentService.deleteAll();
+        return ApiResponse.<Void>builder()
+                .code(HttpStatus.OK.value())
+                .message("Thành công")
+                .result(null)
+                .build();
     }
 
 }
