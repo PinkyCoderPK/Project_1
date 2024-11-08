@@ -1,6 +1,7 @@
-package com.project.ABM.entity;
+package com.example.Project.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 
@@ -20,15 +21,21 @@ public class Resident {
 
     private String apartmentId;
 
-    @Column(name = "username", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
     private String username;
-    @Column(name = "role", columnDefinition = "BOOLEAN")
     private Boolean role;
     private String phoneNumber;
     private LocalDate birthday;
     private String permanentAddress;
     private String temporaryAddress;
-    private LocalDate createAt;
-    private LocalDate updateAt;
+    private LocalDateTime createAt;
+    private LocalDateTime updateAt;
 
+    @PrePersist
+    protected void onCreate() { createAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updateAt = LocalDateTime.now();
+    }
 }

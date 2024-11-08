@@ -29,7 +29,7 @@ public class Apartment {
         createdAt = LocalDateTime.now();
     }
 
-    @PrePersist
+    @PreUpdate
     protected void onUpdate() {
         updateAt = LocalDateTime.now();
     }

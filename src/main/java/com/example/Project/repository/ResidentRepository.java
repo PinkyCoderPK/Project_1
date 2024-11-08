@@ -1,6 +1,6 @@
-package com.project.ABM.repository;
+package com.example.Project.repository;
 
-import com.project.ABM.entity.Resident;
+import com.example.Project.entity.Resident;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
