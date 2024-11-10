@@ -17,6 +17,8 @@ public class ChargeCreateRequest {
     @NotNull(message = "Yêu cầu nộp không được để trống")
     Boolean isMandatory; // Có bắt buộc không
 
+    String description;
+
     @NotNull(message = "Đơn giá không được để trống")
     BigDecimal unitAmount; // Phí/Đơn vị
 

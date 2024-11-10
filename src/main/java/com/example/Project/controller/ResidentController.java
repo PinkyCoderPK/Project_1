@@ -65,6 +65,7 @@ public class ResidentController {
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
+                .result(null)
                 .build();
     }
 
