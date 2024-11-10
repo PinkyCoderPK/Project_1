@@ -11,48 +11,61 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/residents")
+@RequestMapping(value = "/project/resident")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ResidentController {
     ResidentService residentService;
 
     @PostMapping
-    ApiResponse<Resident> createResident(@RequestBody @Valid ResidentCreateRequest request){
-        ApiResponse apiResponse = new ApiResponse();
-        try{
-            apiResponse.setResult(residentService.create(request));
-        } catch (Exception e){
-            apiResponse.setCode(406);
-            apiResponse.setMessage(e.getMessage());
-        }
-        return apiResponse;
+    ApiResponse<Resident> create(@RequestBody @Valid ResidentCreateRequest request){
+        return ApiResponse.<Resident>builder()
+                .code(HttpStatus.OK.value())
+                .message("Thành công")
+                .result(residentService.create(request))
+                .build();
     }
 
     @GetMapping
-    List<Resident> getAll(){
-        return residentService.getAll();
+    ApiResponse<List<Resident>> getAll(){
+        return ApiResponse.<List<Resident>>builder()
+                .code(HttpStatus.OK.value())
+                .message("Thành công")
+                .result(residentService.getAll())
+                .build();
     }
 
-    @GetMapping("/{residentId}")
-    Resident getById(@PathVariable String Id){
-        return residentService.getById(Id);
+    @GetMapping("/{id}")
+    ApiResponse<Resident> getById(@PathVariable String id){
+        return ApiResponse.<Resident>builder()
+                .code(HttpStatus.OK.value())
+                .message("Thành công")
+                .result(residentService.getById(id))
+                .build();
     }
 
-    @PutMapping("/{residentId}")
-    Resident updateById(@PathVariable String Id,@RequestBody @Valid ResidentUpdateRequest request){
-        return residentService.updateById(Id, request);
+    @PutMapping("/{id}")
+    ApiResponse<Resident> updateById(@PathVariable String id,@RequestBody @Valid ResidentUpdateRequest request){
+        return ApiResponse.<Resident>builder()
+                .code(HttpStatus.OK.value())
+                .message("Thành công")
+                .result(residentService.updateById(id, request))
+                .build();
     }
 
-    @DeleteMapping("/{residentId}")
-    String deleteResident(@PathVariable String residentId){
-        residentService.deleteById(residentId);
-        return "Resident deleted";
+    @DeleteMapping("/{id}")
+    ApiResponse<Void> delete(@PathVariable String id){
+        residentService.deleteById(id);
+        return ApiResponse.<Void>builder()
+                .code(HttpStatus.OK.value())
+                .message("Thành công")
+                .build();
     }
 
 }

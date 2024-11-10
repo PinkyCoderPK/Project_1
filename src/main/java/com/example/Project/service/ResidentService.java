@@ -38,9 +38,7 @@ public class ResidentService {
 
     public Resident updateById(String id, @Valid ResidentUpdateRequest request){
         Resident resident = getById(id);
-
         residentMapper.updateResident(resident, request);
-
         return residentRepository.save(resident);
     }
 

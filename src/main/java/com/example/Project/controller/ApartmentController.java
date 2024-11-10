@@ -20,6 +20,8 @@ public class ApartmentController {
     @PostMapping
     public ApiResponse<Apartment> createApartment(@RequestBody @Valid ApartmentCreateRequest apartmentCreateRequest) {
         return ApiResponse.<Apartment>builder()
+                .code(HttpStatus.OK.value())
+                .message("Thành công")
                 .result(apartmentService.create(apartmentCreateRequest))
                 .build();
     }
@@ -27,7 +29,7 @@ public class ApartmentController {
     public ApiResponse<List<Apartment>> getAllApartments() {
         return  ApiResponse.<List<Apartment>>builder()
                 .code(HttpStatus.OK.value())
-                .message("Thanh Cong")
+                .message("Thành công")
                 .result(apartmentService.getAll())
                 .build();
 
@@ -36,6 +38,7 @@ public class ApartmentController {
     public ApiResponse<Apartment> getApartmentById(@PathVariable String id) {
         return ApiResponse.<Apartment>builder()
                 .code(HttpStatus.OK.value())
+                .message("Thành công")
                 .result(apartmentService.getById(id))
                 .build();
     }
@@ -43,6 +46,7 @@ public class ApartmentController {
     public ApiResponse<List<Apartment>> searchApartment(@RequestBody @Valid ApartmentSearchRequest apartmentSearchRequest) {
         return ApiResponse.<List<Apartment>>builder()
                 .code(HttpStatus.OK.value())
+                .message("Thành công")
                 .result(apartmentService.search(apartmentSearchRequest))
                 .build();
     }

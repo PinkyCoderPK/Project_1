@@ -22,6 +22,8 @@ public class ApartmentChargeController {
     @PostMapping
     public ApiResponse<ApartmentCharge> create(@RequestBody @Valid ApartmentChargeCreateRequest request) {
         return ApiResponse.<ApartmentCharge>builder()
+                .code(HttpStatus.OK.value())
+                .message("Thành công")
                 .result(apartmentChargeService.create(request))
                 .build();
     }

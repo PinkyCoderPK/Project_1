@@ -15,9 +15,11 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
     @ExceptionHandler(value = RuntimeException.class)
     ResponseEntity<ApiResponse<Void>> handleRuntimeException(RuntimeException exception) {
-        ApiResponse<Void> apiResponse = new ApiResponse<>();
-        apiResponse.setCode(HttpStatus.BAD_REQUEST.value());
-        apiResponse.setMessage(exception.getMessage());
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message(exception.getMessage())
+                .build();
+
         return  ResponseEntity.badRequest().body(apiResponse);
     }
 
