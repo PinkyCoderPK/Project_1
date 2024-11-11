@@ -41,14 +41,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
-//    @ExceptionHandler(value = NoSuchElementException.class)
-//    ResponseEntity<ApiResponse<Void>> handleNoSuchElementException(NoSuchElementException exception) {
-//        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
-//                .code(HttpStatus.NOT_FOUND.value())
-//                .message(exception.getMessage())
-//                .build();
-//
-//        return  ResponseEntity.badRequest().body(apiResponse);
-//    }
+    @ExceptionHandler(value = NoSuchElementException.class)
+    ResponseEntity<ApiResponse<Void>> handleNoSuchElementException(NoSuchElementException exception) {
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .code(HttpStatus.NOT_FOUND.value())
+                .message(exception.getMessage())
+                .build();
+
+        return  ResponseEntity.badRequest().body(apiResponse);
+    }
 
 }

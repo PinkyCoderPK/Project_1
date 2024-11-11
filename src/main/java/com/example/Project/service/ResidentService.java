@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +34,7 @@ public class ResidentService {
 
     public Resident getById(String id){
         return residentRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Không tìm thấy thông tin cư dân"));
+                .orElseThrow(()-> new NoSuchElementException("Không tìm thấy cư dân"));
     }
 
     public Resident updateById(String id, @Valid ResidentUpdateRequest request){

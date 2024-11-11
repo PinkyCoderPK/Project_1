@@ -22,6 +22,7 @@ import java.lang.reflect.Field;
 import java.security.spec.RSAOtherPrimeInfo;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Data
 @Service
@@ -40,7 +41,7 @@ public class ChargeService {
         return chargeRepository.save(charge);
     }
     public Charge getById(String id) {
-        return chargeRepository.findById(id).orElseThrow(() -> new RuntimeException("Khong tim thay id phi"));
+        return chargeRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Không tìm thấy id phi"));
     }
     public List<Charge> getAll() {
         return chargeRepository.findAll();
@@ -56,7 +57,7 @@ public class ChargeService {
                 }
             }
             catch(IllegalAccessException e){
-                throw new RuntimeException("Khong tim thay " + field.getName());
+                throw new RuntimeException("Thất bại trong truy cập trường: " + field.getName());
             }
         }
         return predicates;

@@ -8,6 +8,8 @@ import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.entity.Charge;
 import com.example.Project.mapper.ApartmentChargeMapper;
 import com.example.Project.repository.ApartmentChargeRepository;
+import com.example.Project.repository.ApartmentRepository;
+import com.example.Project.repository.ChargeRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -23,6 +25,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Data
 @Service
@@ -37,25 +40,25 @@ public class ApartmentChargeService {
     private EntityManager entityManager;
 
     @Autowired
-    private ApartmentService apartmentService;
+    ApartmentRepository apartmentRepository;
 
     @Autowired
-    private ChargeService chargeService;
+    ChargeRepository chargeRepository;
 
 
     public ApartmentCharge create(ApartmentChargeCreateRequest request) {
-        Apartment apartment = apartmentService.getById(request.getApartmentId());
-        if(apartment == null) {
+        Optional<Apartment> apartment = apartmentRepository.findById(request.getApartmentId());
+        if(apartment.isEmpty()) {
             throw new NoSuchElementException("Không tìm thấy hộ chung cư");
         }
 
-        Charge charge = chargeService.getById(request.getChargeId());
-        if(charge == null) {
+        Optional<Charge> charge = chargeRepository.findById(request.getChargeId());
+        if(charge.isEmpty()) {
             throw new NoSuchElementException("Không tìm thấy thông tin phí");
         }
         ApartmentCharge apartmentCharge = apartmentChargeMapper.toApartmentCharge(request);
-        apartmentCharge.setUnitAmount(charge.getUnitAmount());
-        apartmentCharge.setUnitMeasurement(charge.getUnitMeasurement());
+        apartmentCharge.setUnitAmount(charge.get().getUnitAmount());
+        apartmentCharge.setUnitMeasurement(charge.get().getUnitMeasurement());
 
         return apartmentChargeRepository.save(apartmentCharge);
     }
@@ -66,7 +69,7 @@ public class ApartmentChargeService {
 
     public ApartmentCharge getById(String id) {
         return apartmentChargeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy thông tin phí của hộ chung cư"));
+                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy thông tin phí của hộ chung cư"));
     }
 
     // Tổng hợp các điều kiện truy vấn

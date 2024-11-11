@@ -8,6 +8,7 @@ import com.example.Project.entity.Apartment;
 import com.example.Project.entity.Resident;
 import com.example.Project.mapper.ApartmentMapper;
 import com.example.Project.repository.ApartmentRepository;
+import com.example.Project.repository.ResidentRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -23,6 +24,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Data
 @Service
@@ -38,7 +40,7 @@ public class ApartmentService {
     private EntityManager entityManager;
 
     @Autowired
-    private ResidentService residentService;
+    private ResidentRepository residentRepository;
 
     public Apartment create(ApartmentCreateRequest apartmentCreateRequest) {
         Apartment apartment = apartmentMapper.mapCreateApartment(apartmentCreateRequest);
@@ -49,7 +51,7 @@ public class ApartmentService {
         return apartmentRepository.findAll();
     }
     public Apartment getById(String id) {
-        return apartmentRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm thấy mã chung cư"));
+        return apartmentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Không tìm thấy mã chung cư"));
     }
     public List<Predicate> createPredicates(ApartmentSearchRequest apartmentSearchRequests, CriteriaBuilder criteriaBuilder, Root<Apartment> apartmentRoot) {
         List<Predicate> predicates = new ArrayList<>();
@@ -62,7 +64,7 @@ public class ApartmentService {
                 }
             }
             catch (IllegalAccessException e){
-                throw new RuntimeException("Không tìm thấy " + field.getName());
+                throw new RuntimeException("Thất bại trong truy cập trường: " + field.getName());
             }
         }
         return predicates;
@@ -84,8 +86,8 @@ public class ApartmentService {
     }
 
     public Apartment updateById(String id, ApartmentUpdateRequest apartmentUpdateRequest) {
-        Resident resident = residentService.getById(apartmentUpdateRequest.getOwnerId());
-        if((resident == null) && (!apartmentUpdateRequest.getStatus().equals("Available"))) {
+        Optional<Resident> resident = residentRepository.findById(apartmentUpdateRequest.getOwnerId());
+        if (resident.isEmpty() && !apartmentUpdateRequest.getStatus().equals("Available")) {
             throw new NoSuchElementException("Không tìm thấy cư dân");
         }
         Apartment apartment = getById(id);
