@@ -29,7 +29,6 @@ public class ResidentCreateRequest {
     String phoneNumber;
 
     @NotNull(message = "Ngày sinh không được để trống")
-    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "Định dạng ngày sinh không hợp lệ")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     LocalDate birthday;
 

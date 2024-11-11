@@ -10,13 +10,12 @@ import java.time.LocalDateTime;
 @Data
 public class ApartmentSearchRequest {
 
-    private String id;
     private String apartmentName;
     private Integer floorNumber;
     private Integer apartmentNumber;
 
     @PositiveOrZero(message = "Diện tích phải là số không âm")
-    private BigDecimal area;
+    private Double area;
 
     private String ownerId;
     private String status;

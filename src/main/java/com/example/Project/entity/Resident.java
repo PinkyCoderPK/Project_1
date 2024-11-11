@@ -17,7 +17,7 @@ import lombok.experimental.FieldDefaults;
 public class Resident {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String residentId;
+    private String id;
 
     private String apartmentId;
 

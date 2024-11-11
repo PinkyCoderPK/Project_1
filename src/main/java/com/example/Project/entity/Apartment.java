@@ -13,12 +13,11 @@ import java.time.LocalDateTime;
 public class Apartment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-
     private String id;
     private String apartmentName;
     private Integer floorNumber;
     private Integer apartmentNumber;
-    private BigDecimal area;
+    private Double area;
     private String ownerId;
     private String status;
     private LocalDateTime createdAt;

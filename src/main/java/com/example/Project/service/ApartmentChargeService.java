@@ -3,7 +3,9 @@ package com.example.Project.service;
 import com.example.Project.dto.request.apartmentCharge.ApartmentChargeCreateRequest;
 import com.example.Project.dto.request.apartmentCharge.ApartmentChargeSearchRequest;
 import com.example.Project.dto.request.apartmentCharge.ApartmentChargeUpdateRequest;
+import com.example.Project.entity.Apartment;
 import com.example.Project.entity.ApartmentCharge;
+import com.example.Project.entity.Charge;
 import com.example.Project.mapper.ApartmentChargeMapper;
 import com.example.Project.repository.ApartmentChargeRepository;
 import jakarta.persistence.EntityManager;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Data
 @Service
@@ -33,8 +36,27 @@ public class ApartmentChargeService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private ApartmentService apartmentService;
+
+    @Autowired
+    private ChargeService chargeService;
+
+
     public ApartmentCharge create(ApartmentChargeCreateRequest request) {
+        Apartment apartment = apartmentService.getById(request.getApartmentId());
+        if(apartment == null) {
+            throw new NoSuchElementException("Không tìm thấy hộ chung cư");
+        }
+
+        Charge charge = chargeService.getById(request.getChargeId());
+        if(charge == null) {
+            throw new NoSuchElementException("Không tìm thấy thông tin phí");
+        }
         ApartmentCharge apartmentCharge = apartmentChargeMapper.toApartmentCharge(request);
+        apartmentCharge.setUnitAmount(charge.getUnitAmount());
+        apartmentCharge.setUnitMeasurement(charge.getUnitMeasurement());
+
         return apartmentChargeRepository.save(apartmentCharge);
     }
 
@@ -93,6 +115,9 @@ public class ApartmentChargeService {
 
     public ApartmentCharge updateById(String id, ApartmentChargeUpdateRequest request) {
         ApartmentCharge apartmentCharge = getById(id);
+        if(apartmentCharge == null) {
+            throw new NoSuchElementException("Không tìm thấy phí hộ chung cư");
+        }
         apartmentChargeMapper.mapApartmentCharge(apartmentCharge, request);
         return apartmentChargeRepository.save(apartmentCharge);
     }

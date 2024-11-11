@@ -2,31 +2,35 @@ package com.example.Project.dto.request.apartment;
 
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
+@Builder
 @Data
-
+@AllArgsConstructor
+@NoArgsConstructor
 public class ApartmentCreateRequest {
-    @NotNull(message = "Id căn hộ không được để trống")
-    private String id;
 
     @NotNull(message = "Tên căn hộ không được để trống")
     private String apartmentName;
 
     @NotNull(message = "Số tầng không được để trống")
+    @Positive(message = "Số tầng phải là số dương")
     private Integer floorNumber;
 
     @NotNull(message = "Mã số căn hộ không được để trống")
     private Integer apartmentNumber;
 
     @NotNull(message = "Diện tích căn hộ không được để trống")
-    private BigDecimal area;
+    @PositiveOrZero(message = "Diện tích phải là số không âm")
+    private Double area;
 
-    @NotNull(message = "Id người sở hữu không được để trống")
     private String ownerId;
 
-    @NotNull(message = "Trạng thái căn hộ không được để trống")
-    private String status;
+    @Builder.Default
+    private String status = "Available";
 }

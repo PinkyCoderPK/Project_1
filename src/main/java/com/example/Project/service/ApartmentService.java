@@ -5,6 +5,7 @@ import com.example.Project.dto.request.apartment.ApartmentCreateRequest;
 import com.example.Project.dto.request.apartment.ApartmentSearchRequest;
 import com.example.Project.dto.request.apartment.ApartmentUpdateRequest;
 import com.example.Project.entity.Apartment;
+import com.example.Project.entity.Resident;
 import com.example.Project.mapper.ApartmentMapper;
 import com.example.Project.repository.ApartmentRepository;
 import jakarta.persistence.EntityManager;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Data
 @Service
@@ -35,6 +37,8 @@ public class ApartmentService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private ResidentService residentService;
 
     public Apartment create(ApartmentCreateRequest apartmentCreateRequest) {
         Apartment apartment = apartmentMapper.mapCreateApartment(apartmentCreateRequest);
@@ -80,6 +84,10 @@ public class ApartmentService {
     }
 
     public Apartment updateById(String id, ApartmentUpdateRequest apartmentUpdateRequest) {
+        Resident resident = residentService.getById(apartmentUpdateRequest.getOwnerId());
+        if((resident == null) && (!apartmentUpdateRequest.getStatus().equals("Available"))) {
+            throw new NoSuchElementException("Không tìm thấy cư dân");
+        }
         Apartment apartment = getById(id);
         apartmentMapper.mapUpdateApartment(apartment, apartmentUpdateRequest);
         return apartmentRepository.save(apartment);

@@ -42,7 +42,7 @@ public class ResidentService {
         return residentRepository.save(resident);
     }
 
-    public void deleteById(String residentId){
-        residentRepository.deleteById(residentId);
+    public void deleteById(String id){
+        residentRepository.deleteById(id);
     }
 }

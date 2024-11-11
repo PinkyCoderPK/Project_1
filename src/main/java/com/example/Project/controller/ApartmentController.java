@@ -9,6 +9,7 @@ import com.example.Project.entity.Apartment;
 import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.service.ApartmentService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +18,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/project/apartment")
 public class ApartmentController {
+
+    @Autowired
     private ApartmentService apartmentService;
 
     @PostMapping
-    public ApiResponse<Apartment> createApartment(@RequestBody @Valid ApartmentCreateRequest apartmentCreateRequest) {
+    public ApiResponse<Apartment> create(@RequestBody @Valid ApartmentCreateRequest apartmentCreateRequest) {
         return ApiResponse.<Apartment>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
@@ -28,7 +31,7 @@ public class ApartmentController {
                 .build();
     }
     @GetMapping
-    public ApiResponse<List<Apartment>> getAllApartments() {
+    public ApiResponse<List<Apartment>> getAll() {
         return  ApiResponse.<List<Apartment>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
@@ -37,7 +40,7 @@ public class ApartmentController {
 
     }
     @GetMapping("/{id}")
-    public ApiResponse<Apartment> getApartmentById(@PathVariable String id) {
+    public ApiResponse<Apartment> getById(@PathVariable String id) {
         return ApiResponse.<Apartment>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
@@ -45,7 +48,7 @@ public class ApartmentController {
                 .build();
     }
     @GetMapping("/search")
-    public ApiResponse<List<Apartment>> searchApartment(@RequestBody @Valid ApartmentSearchRequest apartmentSearchRequest) {
+    public ApiResponse<List<Apartment>> search(@RequestBody @Valid ApartmentSearchRequest apartmentSearchRequest) {
         return ApiResponse.<List<Apartment>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")

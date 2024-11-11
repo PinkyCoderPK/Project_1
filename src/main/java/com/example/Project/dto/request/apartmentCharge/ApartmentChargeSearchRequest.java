@@ -33,7 +33,5 @@ public class ApartmentChargeSearchRequest {
 
     LocalDateTime dueDate;
 
-    String status;
-
     String paymentMethod;
 }
