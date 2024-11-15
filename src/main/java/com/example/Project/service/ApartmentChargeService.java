@@ -57,8 +57,9 @@ public class ApartmentChargeService {
             throw new NoSuchElementException("Không tìm thấy thông tin phí");
         }
         ApartmentCharge apartmentCharge = apartmentChargeMapper.toApartmentCharge(request);
-        apartmentCharge.setUnitAmount(charge.get().getUnitAmount());
-        apartmentCharge.setUnitMeasurement(charge.get().getUnitMeasurement());
+
+        apartmentCharge.setCharge(charge.get());
+        apartmentCharge.calculateChargeAmount();
 
         return apartmentChargeRepository.save(apartmentCharge);
     }
@@ -122,6 +123,7 @@ public class ApartmentChargeService {
             throw new NoSuchElementException("Không tìm thấy phí hộ chung cư");
         }
         apartmentChargeMapper.mapApartmentCharge(apartmentCharge, request);
+        apartmentCharge.calculateChargeAmount();
         return apartmentChargeRepository.save(apartmentCharge);
     }
 }

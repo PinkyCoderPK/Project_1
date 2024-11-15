@@ -21,6 +21,8 @@ public class ChargeCreateRequest {
 
     String description;
 
+    Double unitQuantity; // số lượng
+
     Double unitAmount; // Phí/Đơn vị
 
     String unitMeasurement; // Đơn vị đo lường

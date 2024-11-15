@@ -18,15 +18,7 @@ public class ApartmentChargeCreateRequest {
 
     @NotNull(message = "Id phí không được để trống")
     String chargeId;
-
-    @PositiveOrZero(message = "Đơn giá phải là số không âm")
-    Double unitAmount;
-
-    String unitMeasurement;
-
-    @Builder.Default
-    @PositiveOrZero(message = "Số lượng phải là số không âm")
-    Double unitQuantity = (double) 0;
+    Double chargeAmount;
 
     @Builder.Default
     @PositiveOrZero(message = "Số tiền đã thanh toán phải là số không âm")

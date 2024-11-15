@@ -13,13 +13,15 @@ import java.time.LocalDateTime;
 public class ApartmentCharge {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+
     String id;
+
+    @ManyToOne
+    @JoinColumn(name = "chargeId", referencedColumnName = "id", insertable = false, updatable = false)
+    Charge charge;
     String apartmentId;
     String chargeId;
     Double chargeAmount;
-    Double unitAmount;
-    String unitMeasurement;
-    Double unitQuantity;
     Double amountPaid;
     Double amountDue;
     LocalDateTime chargeDate;
@@ -28,20 +30,23 @@ public class ApartmentCharge {
     LocalDateTime createAt;
     LocalDateTime updateAt;
 
-    public double getChargeAmount() {
-        return unitAmount * unitQuantity;
+
+    public void calculateChargeAmount() {
+        if (charge != null && charge.getUnitAmount() != null && charge.getUnitQuantity() != null) {
+            this.chargeAmount = charge.getUnitAmount() * charge.getUnitQuantity() ;
+        }
     }
 
     @PrePersist
     protected void onCreate() {
         createAt = LocalDateTime.now();
-        chargeAmount = unitAmount * unitQuantity;
+        calculateChargeAmount();
     }
 
     @PreUpdate
     protected void onUpdate() {
         updateAt = LocalDateTime.now();
-        chargeAmount = unitAmount * unitQuantity;
+        calculateChargeAmount();
     }
 
 }

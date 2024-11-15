@@ -14,14 +14,7 @@ public class ApartmentChargeSearchRequest {
     String apartmentId;
 
     String chargeId;
-
-    @PositiveOrZero(message = "Đơn giá phải là số không âm")
-    Double unitAmount;
-
-    String unitMeasurement;
-
-    @PositiveOrZero(message = "Số lượng phải là số không âm")
-    Double unitQuantity;
+    Double chargeAmount;
 
     @PositiveOrZero(message = "Số tiền đã thanh toán phải là số không âm")
     Double amountPaid;

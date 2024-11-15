@@ -19,6 +19,7 @@ public class Charge {
     String description;
     Double unitAmount; // Phí/Đơn vị
     String unitMeasurement; // Đơn vị đo lường
+    Double unitQuantity; // số lượng
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 
