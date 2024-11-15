@@ -14,14 +14,18 @@ public class ApartmentCharge {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
-    String apartmentId;
-    String chargeId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "charge_id", referencedColumnName = "id")
+    private Charge charge;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "apartment_id", referencedColumnName = "id")
+    private Apartment apartment;
+
     Double chargeAmount;
-    Double unitAmount;
-    String unitMeasurement;
     Double unitQuantity;
     Double amountPaid;
-    Double amountDue;
     LocalDateTime chargeDate;
     LocalDateTime dueDate;
     String paymentMethod;
@@ -29,19 +33,19 @@ public class ApartmentCharge {
     LocalDateTime updateAt;
 
     public double getChargeAmount() {
-        return unitAmount * unitQuantity;
+        return charge.getUnitAmount() * unitQuantity;
     }
 
     @PrePersist
     protected void onCreate() {
         createAt = LocalDateTime.now();
-        chargeAmount = unitAmount * unitQuantity;
+        chargeAmount = charge.getUnitAmount() * unitQuantity;
     }
 
     @PreUpdate
     protected void onUpdate() {
         updateAt = LocalDateTime.now();
-        chargeAmount = unitAmount * unitQuantity;
+        chargeAmount = charge.getUnitAmount() * unitQuantity;
     }
 
 }

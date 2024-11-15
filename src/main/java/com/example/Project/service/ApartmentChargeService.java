@@ -10,6 +10,7 @@ import com.example.Project.mapper.ApartmentChargeMapper;
 import com.example.Project.repository.ApartmentChargeRepository;
 import com.example.Project.repository.ApartmentRepository;
 import com.example.Project.repository.ChargeRepository;
+import com.example.Project.utils.PredicateBuilder;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -45,6 +46,8 @@ public class ApartmentChargeService {
     @Autowired
     ChargeRepository chargeRepository;
 
+    @Autowired
+    PredicateBuilder predicateBuilder;
 
     public ApartmentCharge create(ApartmentChargeCreateRequest request) {
         Optional<Apartment> apartment = apartmentRepository.findById(request.getApartmentId());
@@ -57,8 +60,6 @@ public class ApartmentChargeService {
             throw new NoSuchElementException("Không tìm thấy thông tin phí");
         }
         ApartmentCharge apartmentCharge = apartmentChargeMapper.toApartmentCharge(request);
-        apartmentCharge.setUnitAmount(charge.get().getUnitAmount());
-        apartmentCharge.setUnitMeasurement(charge.get().getUnitMeasurement());
 
         return apartmentChargeRepository.save(apartmentCharge);
     }
@@ -72,24 +73,6 @@ public class ApartmentChargeService {
                 .orElseThrow(() -> new NoSuchElementException("Không tìm thấy thông tin phí của hộ chung cư"));
     }
 
-    // Tổng hợp các điều kiện truy vấn
-    public List<Predicate> _createPredicates(ApartmentChargeSearchRequest request, CriteriaBuilder criteriaBuilder, Root<ApartmentCharge> root ) {
-        List<Predicate> predicates = new ArrayList<>();
-        for(Field field : ApartmentChargeSearchRequest.class.getDeclaredFields()) {
-            field.setAccessible(true);
-            try {
-                Object value = field.get(request);
-                if(value != null) {
-                    predicates.add(criteriaBuilder.equal(root.get(field.getName()), value));
-                }
-            }
-            catch (IllegalAccessException e) {
-                throw new RuntimeException("Thất bại trong truy cập trường: " + field.getName());
-            }
-        }
-        return predicates;
-    }
-
     public List<ApartmentCharge> search(@Valid ApartmentChargeSearchRequest request) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
@@ -100,7 +83,7 @@ public class ApartmentChargeService {
         Root<ApartmentCharge> root = query.from(ApartmentCharge.class);
 
         // Danh sách các điều kiện truy vấn
-        List<Predicate> predicates = _createPredicates(request, criteriaBuilder, root);
+        List<Predicate> predicates = predicateBuilder.createPredicatesToSearch(request, criteriaBuilder, root);
 
         // Thực hiện truy vấn
         query.select(root).where(predicates.toArray(new Predicate[0]));

@@ -19,7 +19,9 @@ public class Resident {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private String apartmentId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "apartment_id", referencedColumnName = "id")
+    private Apartment apartment;
 
     private String username;
     private Boolean role;

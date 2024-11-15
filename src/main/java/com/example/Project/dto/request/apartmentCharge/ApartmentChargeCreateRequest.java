@@ -19,11 +19,6 @@ public class ApartmentChargeCreateRequest {
     @NotNull(message = "Id phí không được để trống")
     String chargeId;
 
-    @PositiveOrZero(message = "Đơn giá phải là số không âm")
-    Double unitAmount;
-
-    String unitMeasurement;
-
     @Builder.Default
     @PositiveOrZero(message = "Số lượng phải là số không âm")
     Double unitQuantity = (double) 0;
@@ -31,10 +26,6 @@ public class ApartmentChargeCreateRequest {
     @Builder.Default
     @PositiveOrZero(message = "Số tiền đã thanh toán phải là số không âm")
     Double amountPaid = (double) 0;
-
-    @Builder.Default
-    @PositiveOrZero(message = "Số tiền còn thiếu phải là số không âm")
-    Double amountDue = (double) 0;
 
     @NotNull(message = "Ngày bắt đầu thu phí không được để trống")
     LocalDateTime chargeDate;

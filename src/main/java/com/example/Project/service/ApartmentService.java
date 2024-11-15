@@ -9,6 +9,7 @@ import com.example.Project.entity.Resident;
 import com.example.Project.mapper.ApartmentMapper;
 import com.example.Project.repository.ApartmentRepository;
 import com.example.Project.repository.ResidentRepository;
+import com.example.Project.utils.PredicateBuilder;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -42,6 +43,9 @@ public class ApartmentService {
     @Autowired
     private ResidentRepository residentRepository;
 
+    @Autowired
+    private PredicateBuilder predicateBuilder;
+
     public Apartment create(ApartmentCreateRequest apartmentCreateRequest) {
         Apartment apartment = apartmentMapper.mapCreateApartment(apartmentCreateRequest);
         return apartmentRepository.save(apartment);
@@ -53,29 +57,14 @@ public class ApartmentService {
     public Apartment getById(String id) {
         return apartmentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Không tìm thấy mã chung cư"));
     }
-    public List<Predicate> createPredicates(ApartmentSearchRequest apartmentSearchRequests, CriteriaBuilder criteriaBuilder, Root<Apartment> apartmentRoot) {
-        List<Predicate> predicates = new ArrayList<>();
-        for(Field field : ApartmentSearchRequest.class.getDeclaredFields()){
-            field.setAccessible(true);
-            try{
-                Object value = field.get(apartmentSearchRequests);
-                if(value != null){
-                    predicates.add(criteriaBuilder.equal(apartmentRoot.get(field.getName()), value));
-                }
-            }
-            catch (IllegalAccessException e){
-                throw new RuntimeException("Thất bại trong truy cập trường: " + field.getName());
-            }
-        }
-        return predicates;
-    }
-    public List<Apartment> search(@Valid  ApartmentSearchRequest apartmentSearchRequests) {
+
+    public List<Apartment> search(@Valid  ApartmentSearchRequest request) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Apartment> criteriaQuery = criteriaBuilder.createQuery(Apartment.class);
-        Root<Apartment> apartmentRoot = criteriaQuery.from(Apartment.class);
-        List<Predicate> predicates = createPredicates(apartmentSearchRequests, criteriaBuilder, apartmentRoot);
-        criteriaQuery.select(apartmentRoot).where(predicates.toArray(new Predicate[0]));
-        return entityManager.createQuery(criteriaQuery).getResultList();
+        CriteriaQuery<Apartment> query = criteriaBuilder.createQuery(Apartment.class);
+        Root<Apartment> root = query.from(Apartment.class);
+        List<Predicate> predicates = predicateBuilder.createPredicatesToSearch(request, criteriaBuilder, root);
+        query.select(root).where(predicates.toArray(new Predicate[0]));
+        return entityManager.createQuery(query).getResultList();
     }
 
     public void deleteById(String id) {
