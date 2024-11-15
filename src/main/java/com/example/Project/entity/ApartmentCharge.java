@@ -26,26 +26,29 @@ public class ApartmentCharge {
     Double chargeAmount;
     Double unitQuantity;
     Double amountPaid;
+    Double amountDue;
     LocalDateTime chargeDate;
     LocalDateTime dueDate;
     String paymentMethod;
     LocalDateTime createAt;
     LocalDateTime updateAt;
 
-    public double getChargeAmount() {
-        return charge.getUnitAmount() * unitQuantity;
+
+    public void setChargeAmount() {
+        if (charge != null && charge.getUnitAmount() != null) {
+            this.chargeAmount = charge.getUnitAmount() * unitQuantity;
+        }
     }
 
     @PrePersist
     protected void onCreate() {
         createAt = LocalDateTime.now();
-        chargeAmount = charge.getUnitAmount() * unitQuantity;
+        setChargeAmount();
     }
 
     @PreUpdate
     protected void onUpdate() {
         updateAt = LocalDateTime.now();
-        chargeAmount = charge.getUnitAmount() * unitQuantity;
+        setChargeAmount();
     }
-
 }

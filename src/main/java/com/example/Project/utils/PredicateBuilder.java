@@ -3,11 +3,13 @@ package com.example.Project.utils;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class PredicateBuilder {
     // Tổng hợp các điều kiện truy vấn
     public <R, T> List<Predicate> createPredicatesToSearch(R request, CriteriaBuilder criteriaBuilder, Root<T> root ) {

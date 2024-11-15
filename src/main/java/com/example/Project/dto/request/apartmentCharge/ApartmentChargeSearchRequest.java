@@ -18,6 +18,8 @@ public class ApartmentChargeSearchRequest {
     @PositiveOrZero(message = "Số lượng phải là số không âm")
     Double unitQuantity;
 
+    Double chargeAmount;
+
     @PositiveOrZero(message = "Số tiền đã thanh toán phải là số không âm")
     Double amountPaid;
 
