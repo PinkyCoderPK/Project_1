@@ -2,6 +2,7 @@ package com.example.Project.controller;
 
 
 import com.example.Project.dto.request.resident.ResidentCreateRequest;
+import com.example.Project.dto.request.resident.ResidentSearchRequest;
 import com.example.Project.dto.request.resident.ResidentUpdateRequest;
 import com.example.Project.dto.response.ApiResponse;
 import com.example.Project.entity.Resident;
@@ -53,7 +54,15 @@ public class ResidentController {
                 .build();
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/search")
+    ApiResponse<List<Resident>> search(@RequestBody @Valid ResidentSearchRequest request){
+        return ApiResponse.<List<Resident>>builder()
+                .code(HttpStatus.OK.value())
+                .message("Thành công")
+                .result(residentService.search(request))
+                .build();
+    }
+    @PatchMapping("/{id}")
     ApiResponse<Resident> updateById(@PathVariable String id,@RequestBody @Valid ResidentUpdateRequest request){
         return ApiResponse.<Resident>builder()
                 .code(HttpStatus.OK.value())
@@ -65,6 +74,15 @@ public class ResidentController {
     @DeleteMapping("/{id}")
     ApiResponse<Void> delete(@PathVariable String id){
         residentService.deleteById(id);
+        return ApiResponse.<Void>builder()
+                .code(HttpStatus.OK.value())
+                .message("Thành công")
+                .result(null)
+                .build();
+    }
+    @DeleteMapping
+    ApiResponse<Void> deleteAll(){
+        residentService.deleleAll();
         return ApiResponse.<Void>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
