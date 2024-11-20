@@ -16,11 +16,11 @@ public class ApartmentCharge {
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "charge_id", referencedColumnName = "id")
     private Charge charge;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "apartment_id", referencedColumnName = "id")
     private Apartment apartment;
 

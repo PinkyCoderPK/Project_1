@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Data
 @Service
@@ -49,17 +48,19 @@ public class ApartmentChargeService {
     @Autowired
     PredicateBuilder predicateBuilder;
 
-    public ApartmentChargeResponse create(ApartmentChargeCreateRequest request) {
-        Optional<Apartment> apartment = apartmentRepository.findById(request.getApartmentId());
-        if(apartment.isEmpty()) {
-            throw new NoSuchElementException("Không tìm thấy hộ chung cư");
-        }
+    @Autowired
+    ApartmentService apartmentService;
 
-        Optional<Charge> charge = chargeRepository.findById(request.getChargeId());
-        if(charge.isEmpty()) {
-            throw new NoSuchElementException("Không tìm thấy thông tin phí");
-        }
+    @Autowired
+    ChargeService chargeService;
+
+    public ApartmentChargeResponse create(ApartmentChargeCreateRequest request) {
+        Apartment apartment = apartmentService.getById(request.getApartmentId());
+        Charge charge = chargeService.getById(request.getChargeId());
+
         ApartmentCharge apartmentCharge = apartmentChargeMapper.toApartmentCharge(request);
+        apartmentCharge.setApartment(apartment);
+        apartmentCharge.setCharge(charge);
 
         apartmentChargeRepository.save(apartmentCharge);
 
@@ -71,19 +72,12 @@ public class ApartmentChargeService {
         List<ApartmentChargeResponse>  responses = new ArrayList<>();
 
         for(ApartmentChargeCreateRequest request : requests) {
-            Optional<Apartment> apartment = apartmentRepository.findById(request.getApartmentId());
-            if(apartment.isEmpty()) {
-                throw new NoSuchElementException("Không tìm thấy hộ chung cư");
-            }
-
-            Optional<Charge> charge = chargeRepository.findById(request.getChargeId());
-            if(charge.isEmpty()) {
-                throw new NoSuchElementException("Không tìm thấy thông tin phí");
-            }
+            Apartment apartment = apartmentService.getById(request.getApartmentId());
+            Charge charge = chargeService.getById(request.getChargeId());
 
             ApartmentCharge apartmentCharge = apartmentChargeMapper.toApartmentCharge(request);
-            apartmentCharge.setApartment(apartment.get());
-            apartmentCharge.setCharge(charge.get());
+            apartmentCharge.setApartment(apartment);
+            apartmentCharge.setCharge(charge);
 
             apartmentChargeRepository.save(apartmentCharge);
             responses.add(apartmentChargeMapper.toApartmentChargeResponse(apartmentCharge));

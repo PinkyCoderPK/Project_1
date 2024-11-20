@@ -23,16 +23,12 @@ import java.util.Optional;
 public class ResidentService {
     ResidentRepository residentRepository;
     ResidentMapper residentMapper;
-    ApartmentRepository apartmentRepository;
+    ApartmentService apartmentService;
 
     public Resident create(@Valid ResidentCreateRequest request){
-
         Resident resident = residentMapper.toResident(request);
-        Optional<Apartment> apartment = apartmentRepository.findById(request.getApartmentId());
-        if(apartment.isEmpty()) {
-            throw new NoSuchElementException("Không tìm thấy hộ chung cư");
-        }
-        resident.setApartment(apartment.get());
+        Apartment apartment = apartmentService.getById(request.getApartmentId());
+        resident.setApartment(apartment);
         return residentRepository.save(resident);
     }
 
@@ -46,13 +42,11 @@ public class ResidentService {
     }
 
     public Resident updateById(String id, @Valid ResidentUpdateRequest request){
-        Resident resident = getById(id);
-        Optional<Apartment> apartment = apartmentRepository.findById(request.getApartmentId());
-        if(apartment.isEmpty()) {
-            throw new NoSuchElementException("Không tìm thấy hộ chung cư");
-        }
+        Resident resident = residentMapper.toResident(request);
+        Apartment apartment = apartmentService.getById(request.getApartmentId());
         residentMapper.updateResident(resident, request);
-        resident.setApartment(apartment.get());
+
+        resident.setApartment(apartment);
         return residentRepository.save(resident);
     }
 

@@ -19,7 +19,7 @@ public class Resident {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "apartment_id", referencedColumnName = "id")
     private Apartment apartment;
 
