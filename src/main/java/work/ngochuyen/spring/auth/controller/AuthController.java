@@ -1,19 +1,21 @@
 package work.ngochuyen.spring.auth.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import work.ngochuyen.spring.auth.dto.reponse.IntrospectResponse;
-import work.ngochuyen.spring.auth.dto.request.IntrospectRequest;
 import work.ngochuyen.spring.auth.dto.request.LoginRequest;
 import work.ngochuyen.spring.auth.dto.request.RegisterRequest;
 import work.ngochuyen.spring.auth.service.UserService;
 import work.ngochuyen.spring.common.dto.BaseResponse;
+import work.ngochuyen.spring.common.dto.ErrorResponse;
+import work.ngochuyen.spring.common.security.JwtService;
 
 @RestController
 @RequestMapping("/v1/auth")
@@ -21,6 +23,8 @@ import work.ngochuyen.spring.common.dto.BaseResponse;
 public class AuthController {//quan ly mapping
     @Autowired
     UserService userService;
+    @Autowired
+    private JwtService jwtService;
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public BaseResponse<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
         return userService.register(registerRequest);
@@ -41,4 +45,24 @@ public class AuthController {//quan ly mapping
             throw new BadCredentialsException("");
         }
     }
+
+    @PostMapping("/logout")
+    public BaseResponse<String> logout(HttpServletRequest request) {
+        // Lấy token từ header Authorization
+        String authorizationHeader = request.getHeader("Authorization");
+
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            // Không tìm thấy token hoặc không hợp lệ
+            return new BaseResponse<>(HttpStatus.OK.value(), "lgout failure", null);
+        }
+
+        String token = authorizationHeader.substring(7); // Bỏ "Bearer " ra khỏi chuỗi token
+
+        // Thêm token vào blacklist
+        jwtService.logout(token);
+
+        // Trả về phản hồi thành công
+        return new BaseResponse<>(HttpStatus.OK.value(), "logout successful", null);
+    }
+
 }

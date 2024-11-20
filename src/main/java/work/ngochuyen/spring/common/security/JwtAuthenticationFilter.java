@@ -14,17 +14,27 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class JwtAuthenticationFilter extends OncePerRequestFilter{
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtService jwtService;
     @Autowired
     private CustomUserDetailsService userDetailsService;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, java.io.IOException {
         final String authorizationHeader = request.getHeader("Authorization");
+
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String jwt = authorizationHeader.substring(7);
+
+            // Kiểm tra token có trong blacklist hay không
+            if (jwtService.isTokenBlacklisted(jwt)) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Token is invalid or has been logged out.");
+                return;
+            }
+
             String userId = jwtService.extractSubject(jwt);
             if (userId != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
@@ -33,6 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         }
+
         chain.doFilter(request, response);
     }
 }

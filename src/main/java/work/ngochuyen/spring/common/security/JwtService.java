@@ -14,6 +14,8 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class JwtService {
@@ -60,5 +62,22 @@ public class JwtService {
         } catch (Exception e) {
             return null; // Consider logging the exception for better debugging
         }
+    }
+
+    private final Set<String> tokenBlacklist = new HashSet<>(); // Danh sách đen token
+
+    // Thêm token vào blacklist
+    public void invalidateToken(String token) {
+        tokenBlacklist.add(token); // Thêm token vào danh sách blacklist
+    }
+
+    // Kiểm tra token có bị vô hiệu hóa không
+    public boolean isTokenBlacklisted(String token) {
+        return tokenBlacklist.contains(token); // Kiểm tra token có bị vô hiệu hóa không
+    }
+
+    // Phương thức logout
+    public void logout(String token) {
+        invalidateToken(token); // Thêm token vào blacklist
     }
 }
