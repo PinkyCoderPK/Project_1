@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,10 +24,9 @@ public class ApartmentCharge {
     @JoinColumn(name = "apartment_id", referencedColumnName = "id")
     private Apartment apartment;
 
-    Double chargeAmount;
-    Double unitQuantity;
-    Double amountPaid;
-    Double amountDue;
+    BigDecimal chargeAmount;
+    BigDecimal unitQuantity;
+    BigDecimal amountPaid;
     LocalDateTime chargeDate;
     LocalDateTime dueDate;
     String paymentMethod;
@@ -36,7 +36,7 @@ public class ApartmentCharge {
 
     public void setChargeAmount() {
         if (charge != null && charge.getUnitAmount() != null) {
-            this.chargeAmount = charge.getUnitAmount() * unitQuantity;
+            this.chargeAmount = charge.getUnitAmount().multiply(unitQuantity);
         }
     }
 

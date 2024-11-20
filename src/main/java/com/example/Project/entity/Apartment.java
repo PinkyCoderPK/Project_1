@@ -17,7 +17,7 @@ public class Apartment {
     private String apartmentName;
     private Integer floorNumber;
     private Integer apartmentNumber;
-    private Double area;
+    private BigDecimal area;
     private String ownerId;
     private String status;
     private LocalDateTime createdAt;

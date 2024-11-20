@@ -25,8 +25,9 @@ public class BillService {
 
         // tổng
         double totalPaymentAmount = charges.stream()
-                .mapToDouble(ApartmentCharge::getChargeAmount)
+                .mapToDouble(charge -> charge.getChargeAmount().doubleValue())
                 .sum();
+
 
         bill.setTotalPaymentAmount(totalPaymentAmount);
     }

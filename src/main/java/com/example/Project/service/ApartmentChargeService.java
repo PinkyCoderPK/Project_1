@@ -3,6 +3,7 @@ package com.example.Project.service;
 import com.example.Project.dto.request.apartmentCharge.ApartmentChargeCreateRequest;
 import com.example.Project.dto.request.apartmentCharge.ApartmentChargeSearchRequest;
 import com.example.Project.dto.request.apartmentCharge.ApartmentChargeUpdateRequest;
+import com.example.Project.dto.response.ApartmentChargeResponse;
 import com.example.Project.entity.Apartment;
 import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.entity.Charge;
@@ -22,7 +23,6 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -49,7 +49,7 @@ public class ApartmentChargeService {
     @Autowired
     PredicateBuilder predicateBuilder;
 
-    public ApartmentCharge create(ApartmentChargeCreateRequest request) {
+    public ApartmentChargeResponse create(ApartmentChargeCreateRequest request) {
         Optional<Apartment> apartment = apartmentRepository.findById(request.getApartmentId());
         if(apartment.isEmpty()) {
             throw new NoSuchElementException("Không tìm thấy hộ chung cư");
@@ -61,7 +61,35 @@ public class ApartmentChargeService {
         }
         ApartmentCharge apartmentCharge = apartmentChargeMapper.toApartmentCharge(request);
 
-        return apartmentChargeRepository.save(apartmentCharge);
+        apartmentChargeRepository.save(apartmentCharge);
+
+        return apartmentChargeMapper.toApartmentChargeResponse(apartmentCharge);
+    }
+
+    public List<ApartmentChargeResponse> createMultiple(List<ApartmentChargeCreateRequest> requests) {
+
+        List<ApartmentChargeResponse>  responses = new ArrayList<>();
+
+        for(ApartmentChargeCreateRequest request : requests) {
+            Optional<Apartment> apartment = apartmentRepository.findById(request.getApartmentId());
+            if(apartment.isEmpty()) {
+                throw new NoSuchElementException("Không tìm thấy hộ chung cư");
+            }
+
+            Optional<Charge> charge = chargeRepository.findById(request.getChargeId());
+            if(charge.isEmpty()) {
+                throw new NoSuchElementException("Không tìm thấy thông tin phí");
+            }
+
+            ApartmentCharge apartmentCharge = apartmentChargeMapper.toApartmentCharge(request);
+            apartmentCharge.setApartment(apartment.get());
+            apartmentCharge.setCharge(charge.get());
+
+            apartmentChargeRepository.save(apartmentCharge);
+            responses.add(apartmentChargeMapper.toApartmentChargeResponse(apartmentCharge));
+
+        }
+        return responses;
     }
 
     public List<ApartmentCharge> getAll() {

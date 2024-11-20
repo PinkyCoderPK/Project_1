@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,7 +18,7 @@ public class Charge {
     String chargeName;
     Boolean isMandatory; // Có bắt buộc không
     String description;
-    Double unitAmount; // Phí/Đơn vị
+    BigDecimal unitAmount; // Phí/Đơn vị
     String unitMeasurement; // Đơn vị đo lường
     LocalDateTime createdAt;
     LocalDateTime updatedAt;

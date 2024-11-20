@@ -3,6 +3,7 @@ package com.example.Project.controller;
 import com.example.Project.dto.request.apartmentCharge.ApartmentChargeCreateRequest;
 import com.example.Project.dto.request.apartmentCharge.ApartmentChargeSearchRequest;
 import com.example.Project.dto.request.apartmentCharge.ApartmentChargeUpdateRequest;
+import com.example.Project.dto.response.ApartmentChargeResponse;
 import com.example.Project.dto.response.ApiResponse;
 import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.service.ApartmentChargeService;
@@ -20,14 +21,22 @@ public class ApartmentChargeController {
     private ApartmentChargeService apartmentChargeService;
 
     @PostMapping
-    public ApiResponse<ApartmentCharge> create(@RequestBody @Valid ApartmentChargeCreateRequest request) {
-        return ApiResponse.<ApartmentCharge>builder()
+    public ApiResponse<ApartmentChargeResponse> create(@RequestBody @Valid ApartmentChargeCreateRequest request) {
+        return ApiResponse.<ApartmentChargeResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
                 .result(apartmentChargeService.create(request))
                 .build();
     }
 
+    @PostMapping("/createMultiple")
+    public ApiResponse<List<ApartmentChargeResponse>> createMultiple(@RequestBody @Valid List<ApartmentChargeCreateRequest> requests) {
+        return ApiResponse.<List<ApartmentChargeResponse>>builder()
+                .code(HttpStatus.OK.value())
+                .message("Thành công")
+                .result(apartmentChargeService.createMultiple(requests))
+                .build();
+    }
     @GetMapping
     public ApiResponse<List<ApartmentCharge>> getAll() {
         return ApiResponse.<List<ApartmentCharge>>builder()
