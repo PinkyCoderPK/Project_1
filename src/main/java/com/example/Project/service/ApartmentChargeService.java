@@ -13,6 +13,7 @@ import com.example.Project.repository.ApartmentRepository;
 import com.example.Project.repository.ChargeRepository;
 import com.example.Project.utils.PredicateBuilder;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Data
 @Service
@@ -54,7 +56,7 @@ public class ApartmentChargeService {
     @Autowired
     ChargeService chargeService;
 
-    public ApartmentChargeResponse create(ApartmentChargeCreateRequest request) {
+    public ApartmentCharge create(ApartmentChargeCreateRequest request) {
         Apartment apartment = apartmentService.getById(request.getApartmentId());
         Charge charge = chargeService.getById(request.getChargeId());
 
@@ -62,14 +64,12 @@ public class ApartmentChargeService {
         apartmentCharge.setApartment(apartment);
         apartmentCharge.setCharge(charge);
 
-        apartmentChargeRepository.save(apartmentCharge);
-
-        return apartmentChargeMapper.toApartmentChargeResponse(apartmentCharge);
+        return apartmentChargeRepository.save(apartmentCharge);
     }
 
-    public List<ApartmentChargeResponse> createMultiple(List<ApartmentChargeCreateRequest> requests) {
+    public List<ApartmentCharge> createMultiple(List<ApartmentChargeCreateRequest> requests) {
 
-        List<ApartmentChargeResponse>  responses = new ArrayList<>();
+        List<ApartmentCharge> apartmentCharges = new ArrayList<>();
 
         for(ApartmentChargeCreateRequest request : requests) {
             Apartment apartment = apartmentService.getById(request.getApartmentId());
@@ -79,11 +79,9 @@ public class ApartmentChargeService {
             apartmentCharge.setApartment(apartment);
             apartmentCharge.setCharge(charge);
 
-            apartmentChargeRepository.save(apartmentCharge);
-            responses.add(apartmentChargeMapper.toApartmentChargeResponse(apartmentCharge));
-
+            apartmentCharges.add(apartmentCharge);
         }
-        return responses;
+        return apartmentChargeRepository.saveAll(apartmentCharges);
     }
 
     public List<ApartmentCharge> getAll() {
@@ -122,11 +120,33 @@ public class ApartmentChargeService {
     }
 
     public ApartmentCharge updateById(String id, ApartmentChargeUpdateRequest request) {
+
         ApartmentCharge apartmentCharge = getById(id);
-        if(apartmentCharge == null) {
-            throw new NoSuchElementException("Không tìm thấy phí hộ chung cư");
-        }
+
+        Apartment apartment = apartmentService.getById(request.getApartmentId());
+        Charge charge = chargeService.getById(request.getChargeId());
+
         apartmentChargeMapper.mapApartmentCharge(apartmentCharge, request);
+        apartmentCharge.setApartment(apartment);
+        apartmentCharge.setCharge(charge);
+        apartmentCharge.setChargeAmount();
+
         return apartmentChargeRepository.save(apartmentCharge);
     }
+
+//    public List<ApartmentChargeResponse> updateMultiple(List<ApartmentChargeUpdateRequest> requests) {
+//
+//        List<ApartmentChargeResponse> responses = new ArrayList<>();
+//
+//        for(ApartmentChargeCreateRequest request : requests) {
+//            Apartment apartment = apartmentService.getById(request.getApartmentId());
+//            Charge charge = chargeService.getById(request.getChargeId());
+//
+//            apartmentChargeMapper.mapApartmentCharge(apartmentCharge, request);
+//            apartmentCharge.setApartment(apartment);
+//            apartmentCharge.setCharge(charge);
+//            apartmentCharge.setChargeAmount();
+//        }
+//        return responses;
+//    }
 }

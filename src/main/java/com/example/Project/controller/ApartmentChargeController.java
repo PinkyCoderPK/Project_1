@@ -6,12 +6,14 @@ import com.example.Project.dto.request.apartmentCharge.ApartmentChargeUpdateRequ
 import com.example.Project.dto.response.ApartmentChargeResponse;
 import com.example.Project.dto.response.ApiResponse;
 import com.example.Project.entity.ApartmentCharge;
+import com.example.Project.mapper.ApartmentChargeMapper;
 import com.example.Project.service.ApartmentChargeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -20,56 +22,83 @@ public class ApartmentChargeController {
     @Autowired
     private ApartmentChargeService apartmentChargeService;
 
+    @Autowired
+    private ApartmentChargeMapper apartmentChargeMapper;
+
     @PostMapping
     public ApiResponse<ApartmentChargeResponse> create(@RequestBody @Valid ApartmentChargeCreateRequest request) {
+        ApartmentCharge apartmentCharge = apartmentChargeService.create(request);
+        ApartmentChargeResponse response = apartmentChargeMapper.toApartmentChargeResponse(apartmentCharge);
         return ApiResponse.<ApartmentChargeResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
-                .result(apartmentChargeService.create(request))
+                .result(response)
                 .build();
     }
 
     @PostMapping("/createMultiple")
     public ApiResponse<List<ApartmentChargeResponse>> createMultiple(@RequestBody @Valid List<ApartmentChargeCreateRequest> requests) {
+        List<ApartmentCharge> apartmentCharges = apartmentChargeService.createMultiple(requests);
+        List<ApartmentChargeResponse> responses = new ArrayList<>();
+        for(ApartmentCharge apartmentCharge : apartmentCharges) {
+            ApartmentChargeResponse response = apartmentChargeMapper.toApartmentChargeResponse(apartmentCharge);
+            responses.add(response);
+        }
         return ApiResponse.<List<ApartmentChargeResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
-                .result(apartmentChargeService.createMultiple(requests))
+                .result(responses)
                 .build();
     }
     @GetMapping
-    public ApiResponse<List<ApartmentCharge>> getAll() {
-        return ApiResponse.<List<ApartmentCharge>>builder()
+    public ApiResponse<List<ApartmentChargeResponse>> getAll() {
+        List<ApartmentCharge> apartmentCharges = apartmentChargeService.getAll();
+        List<ApartmentChargeResponse> responses = new ArrayList<>();
+        for(ApartmentCharge apartmentCharge : apartmentCharges) {
+            ApartmentChargeResponse response = apartmentChargeMapper.toApartmentChargeResponse(apartmentCharge);
+            responses.add(response);
+        }
+        return ApiResponse.<List<ApartmentChargeResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
-                .result(apartmentChargeService.getAll())
+                .result(responses)
                 .build();
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<ApartmentCharge> getById(@PathVariable String id) {
-        return ApiResponse.<ApartmentCharge>builder()
+    public ApiResponse<ApartmentChargeResponse> getById(@PathVariable String id) {
+        ApartmentCharge apartmentCharge = apartmentChargeService.getById(id);
+        ApartmentChargeResponse response = apartmentChargeMapper.toApartmentChargeResponse(apartmentCharge);
+        return ApiResponse.<ApartmentChargeResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
-                .result(apartmentChargeService.getById(id))
+                .result(response)
                 .build();
     }
 
     @PostMapping("/search")
-    public ApiResponse<List<ApartmentCharge>> search(@RequestBody @Valid ApartmentChargeSearchRequest request) {
-        return ApiResponse.<List<ApartmentCharge>>builder()
+    public ApiResponse<List<ApartmentChargeResponse>> search(@RequestBody @Valid ApartmentChargeSearchRequest request) {
+        List<ApartmentCharge> apartmentCharges = apartmentChargeService.search(request);
+        List<ApartmentChargeResponse> responses = new ArrayList<>();
+        for(ApartmentCharge apartmentCharge : apartmentCharges) {
+            ApartmentChargeResponse response = apartmentChargeMapper.toApartmentChargeResponse(apartmentCharge);
+            responses.add(response);
+        }
+        return ApiResponse.<List<ApartmentChargeResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
-                .result(apartmentChargeService.search(request))
+                .result(responses)
                 .build();
     }
 
     @PatchMapping("/{id}")
-    public ApiResponse<ApartmentCharge> updateById (@PathVariable String id, @RequestBody @Valid ApartmentChargeUpdateRequest request) {
-        return ApiResponse.<ApartmentCharge>builder()
+    public ApiResponse<ApartmentChargeResponse> updateById (@PathVariable String id, @RequestBody @Valid ApartmentChargeUpdateRequest request) {
+        ApartmentCharge apartmentCharge = apartmentChargeService.updateById(id, request);
+        ApartmentChargeResponse response = apartmentChargeMapper.toApartmentChargeResponse(apartmentCharge);
+        return ApiResponse.<ApartmentChargeResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
-                .result(apartmentChargeService.updateById(id, request))
+                .result(response)
                 .build();
     }
 

@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +22,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ResidentService {
+    @Autowired
     ResidentRepository residentRepository;
+    @Autowired
     ResidentMapper residentMapper;
+    @Autowired
     ApartmentService apartmentService;
 
     public Resident create(@Valid ResidentCreateRequest request){
@@ -45,8 +49,8 @@ public class ResidentService {
         Resident resident = residentMapper.toResident(request);
         Apartment apartment = apartmentService.getById(request.getApartmentId());
         residentMapper.updateResident(resident, request);
-
         resident.setApartment(apartment);
+
         return residentRepository.save(resident);
     }
 
