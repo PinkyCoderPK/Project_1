@@ -1,5 +1,6 @@
 package com.example.Project.dto.response;
 
+import com.example.Project.enums.Enums;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,7 +17,7 @@ public class ResidentResponse {
     String apartmentId;
     String apartmentName;
     String username;
-    Boolean role;
+    Enums.ResidentRole role;
     String phoneNumber;
     LocalDate birthday;
     String permanentAddress;

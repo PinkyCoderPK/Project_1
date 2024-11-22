@@ -19,6 +19,6 @@ public interface ResidentMapper {
     ResidentResponse toResidentResponse(Resident resident);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateResident(@MappingTarget Resident resident, @Valid ResidentUpdateRequest request);
+    void mapUpdateResident(@MappingTarget Resident resident, @Valid ResidentUpdateRequest request);
 
 }

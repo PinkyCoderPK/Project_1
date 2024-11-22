@@ -123,7 +123,7 @@ public class ApartmentChargeService {
         Apartment apartment = apartmentService.getById(request.getApartmentId());
         Charge charge = chargeService.getById(request.getChargeId());
 
-        apartmentChargeMapper.mapApartmentCharge(apartmentCharge, request);
+        apartmentChargeMapper.mapUpdateApartmentCharge(apartmentCharge, request);
         apartmentCharge.setApartment(apartment);
         apartmentCharge.setCharge(charge);
 

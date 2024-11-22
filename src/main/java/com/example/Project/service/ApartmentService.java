@@ -6,6 +6,7 @@ import com.example.Project.dto.request.apartment.ApartmentSearchRequest;
 import com.example.Project.dto.request.apartment.ApartmentUpdateRequest;
 import com.example.Project.entity.Apartment;
 import com.example.Project.entity.Resident;
+import com.example.Project.enums.Enums;
 import com.example.Project.mapper.ApartmentMapper;
 import com.example.Project.repository.ApartmentRepository;
 import com.example.Project.repository.ResidentRepository;
@@ -57,7 +58,7 @@ public class ApartmentService {
                 .orElseThrow(() -> new NoSuchElementException("Không tìm thấy mã chung cư"));
     }
 
-    public List<Apartment> search(@Valid  ApartmentSearchRequest request) {
+    public List<Apartment> search(@Valid ApartmentSearchRequest request) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Apartment> query = criteriaBuilder.createQuery(Apartment.class);
         Root<Apartment> root = query.from(Apartment.class);
@@ -75,8 +76,14 @@ public class ApartmentService {
 
     public Apartment updateById(String id, ApartmentUpdateRequest apartmentUpdateRequest) {
         Optional<Resident> resident = residentRepository.findById(apartmentUpdateRequest.getOwnerId());
-        if (resident.isEmpty() && !apartmentUpdateRequest.getStatus().equals("Available")) {
-            throw new NoSuchElementException("Không tìm thấy cư dân");
+        if (resident.isEmpty()) {
+            if (apartmentUpdateRequest.getStatus() != Enums.ApartmentStatus.AVAILABLE) {
+                throw new NoSuchElementException("Không tìm thấy cư dân");
+            }
+        } else {
+            if (Enums.ApartmentStatus.AVAILABLE.equals(apartmentUpdateRequest.getStatus())) {
+                throw new NoSuchElementException("Cần cập nhật lại trạng thái căn hộ");
+            }
         }
         Apartment apartment = getById(id);
         apartmentMapper.mapUpdateApartment(apartment, apartmentUpdateRequest);

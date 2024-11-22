@@ -1,6 +1,7 @@
 package com.example.Project.dto.request.apartment;
 
 
+import com.example.Project.enums.Enums;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
@@ -18,7 +19,7 @@ public class ApartmentSearchRequest {
     private Double area;
 
     private String ownerId;
-    private String status;
+    private Enums.ApartmentStatus status;
     private LocalDateTime createdAt;
 
 }

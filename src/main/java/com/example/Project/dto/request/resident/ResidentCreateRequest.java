@@ -1,8 +1,8 @@
 package com.example.Project.dto.request.resident;
 
+import com.example.Project.enums.Enums;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,8 +22,7 @@ public class ResidentCreateRequest {
     @NotNull(message = "Tên cư dân không được để trống")
     String username;
 
-    @NotNull (message = "Vai trò cư dân không được để trống")
-    Boolean role;
+    Enums.ResidentRole role = Enums.ResidentRole.NON_OWNER;
 
     @Pattern(regexp = "^[0-9]{10}$", message = "Định dạng số điện thoại không hợp lệ")
     String phoneNumber;

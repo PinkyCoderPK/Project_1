@@ -3,6 +3,7 @@ package com.example.Project.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.example.Project.enums.Enums;
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -24,7 +25,8 @@ public class Resident {
     private Apartment apartment;
 
     private String username;
-    private Boolean role;
+    @Enumerated(EnumType.STRING)
+    private Enums.ResidentRole role;
     private String phoneNumber;
     private LocalDate birthday;
     private String permanentAddress;

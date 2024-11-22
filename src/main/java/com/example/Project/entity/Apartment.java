@@ -1,9 +1,8 @@
 package com.example.Project.entity;
 
+import com.example.Project.enums.Enums;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -19,7 +18,8 @@ public class Apartment {
     private Integer apartmentNumber;
     private BigDecimal area;
     private String ownerId;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Enums.ApartmentStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updateAt;
 

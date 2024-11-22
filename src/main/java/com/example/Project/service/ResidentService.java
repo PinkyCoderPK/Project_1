@@ -5,7 +5,6 @@ import com.example.Project.dto.request.resident.ResidentUpdateRequest;
 import com.example.Project.entity.Apartment;
 import com.example.Project.entity.Resident;
 import com.example.Project.mapper.ResidentMapper;
-import com.example.Project.repository.ApartmentRepository;
 import com.example.Project.repository.ResidentRepository;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,9 +44,9 @@ public class ResidentService {
     }
 
     public Resident updateById(String id, @Valid ResidentUpdateRequest request){
-        Resident resident = residentMapper.toResident(request);
+        Resident resident = getById(id);
         Apartment apartment = apartmentService.getById(request.getApartmentId());
-        residentMapper.updateResident(resident, request);
+        residentMapper.mapUpdateResident(resident, request);
         resident.setApartment(apartment);
 
         return residentRepository.save(resident);

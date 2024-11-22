@@ -1,6 +1,7 @@
 package com.example.Project.dto.request.apartment;
 
 
+import com.example.Project.enums.Enums;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -31,6 +32,5 @@ public class ApartmentCreateRequest {
 
     private String ownerId;
 
-    @Builder.Default
-    private String status = "Available";
+    private Enums.ApartmentStatus status = Enums.ApartmentStatus.AVAILABLE;
 }
