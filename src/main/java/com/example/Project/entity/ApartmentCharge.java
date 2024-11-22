@@ -24,6 +24,10 @@ public class ApartmentCharge {
     @JoinColumn(name = "apartment_id", referencedColumnName = "id")
     private Apartment apartment;
 
+    @ManyToOne
+    @JoinColumn(name = "bill_id", referencedColumnName = "id")
+    Bill bill;
+
     BigDecimal chargeAmount;
     BigDecimal unitQuantity;
     BigDecimal amountPaid;
