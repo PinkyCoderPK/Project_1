@@ -4,7 +4,9 @@ package com.example.Project.controller;
 import com.example.Project.dto.request.resident.ResidentCreateRequest;
 import com.example.Project.dto.request.resident.ResidentUpdateRequest;
 import com.example.Project.dto.response.ApiResponse;
+import com.example.Project.dto.response.ResidentResponse;
 import com.example.Project.entity.Resident;
+import com.example.Project.mapper.ResidentMapper;
 import com.example.Project.service.ResidentService;
 import jakarta.validation.Valid;
 
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,39 +29,54 @@ public class ResidentController {
     @Autowired
     ResidentService residentService;
 
+    @Autowired
+    ResidentMapper residentMapper;
+
     @PostMapping
-    ApiResponse<Resident> create(@RequestBody @Valid ResidentCreateRequest request){
-        return ApiResponse.<Resident>builder()
+    ApiResponse<ResidentResponse> create(@RequestBody @Valid ResidentCreateRequest request){
+        Resident resident = residentService.create(request);
+        ResidentResponse response = residentMapper.toResidentResponse(resident);
+        return ApiResponse.<ResidentResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
-                .result(residentService.create(request))
+                .result(response)
                 .build();
     }
 
     @GetMapping
-    ApiResponse<List<Resident>> getAll(){
-        return ApiResponse.<List<Resident>>builder()
+    ApiResponse<List<ResidentResponse>> getAll(){
+        List<Resident> residents = residentService.getAll();
+        List<ResidentResponse> responses = new ArrayList<>();
+        for(Resident resident : residents) {
+            ResidentResponse response = residentMapper.toResidentResponse(resident);
+            responses.add(response);
+        }
+        return ApiResponse.<List<ResidentResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
-                .result(residentService.getAll())
+                .result(responses)
                 .build();
     }
 
     @GetMapping("/{id}")
-    ApiResponse<Resident> getById(@PathVariable String id){
-        return ApiResponse.<Resident>builder()
+    ApiResponse<ResidentResponse> getById(@PathVariable String id){
+        Resident resident = residentService.getById(id);
+        ResidentResponse response = residentMapper.toResidentResponse(resident);
+        return ApiResponse.<ResidentResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
-                .result(residentService.getById(id))
+                .result(response)
                 .build();
     }
 
     @PutMapping("/{id}")
-    ApiResponse<Resident> updateById(@PathVariable String id,@RequestBody @Valid ResidentUpdateRequest request){
-        return ApiResponse.<Resident>builder()
+    ApiResponse<ResidentResponse> updateById(@PathVariable String id,@RequestBody @Valid ResidentUpdateRequest request){
+        Resident resident = residentService.updateById(id, request);
+        ResidentResponse response = residentMapper.toResidentResponse(resident);
+        return ApiResponse.<ResidentResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
-                .result(residentService.updateById(id, request))
+                .result(response)
                 .build();
     }
 

@@ -68,9 +68,7 @@ public class ApartmentChargeService {
     }
 
     public List<ApartmentCharge> createMultiple(List<ApartmentChargeCreateRequest> requests) {
-
         List<ApartmentCharge> apartmentCharges = new ArrayList<>();
-
         for(ApartmentChargeCreateRequest request : requests) {
             Apartment apartment = apartmentService.getById(request.getApartmentId());
             Charge charge = chargeService.getById(request.getChargeId());
@@ -120,7 +118,6 @@ public class ApartmentChargeService {
     }
 
     public ApartmentCharge updateById(String id, ApartmentChargeUpdateRequest request) {
-
         ApartmentCharge apartmentCharge = getById(id);
 
         Apartment apartment = apartmentService.getById(request.getApartmentId());
@@ -129,24 +126,8 @@ public class ApartmentChargeService {
         apartmentChargeMapper.mapApartmentCharge(apartmentCharge, request);
         apartmentCharge.setApartment(apartment);
         apartmentCharge.setCharge(charge);
-        apartmentCharge.setChargeAmount();
 
         return apartmentChargeRepository.save(apartmentCharge);
     }
 
-//    public List<ApartmentChargeResponse> updateMultiple(List<ApartmentChargeUpdateRequest> requests) {
-//
-//        List<ApartmentChargeResponse> responses = new ArrayList<>();
-//
-//        for(ApartmentChargeCreateRequest request : requests) {
-//            Apartment apartment = apartmentService.getById(request.getApartmentId());
-//            Charge charge = chargeService.getById(request.getChargeId());
-//
-//            apartmentChargeMapper.mapApartmentCharge(apartmentCharge, request);
-//            apartmentCharge.setApartment(apartment);
-//            apartmentCharge.setCharge(charge);
-//            apartmentCharge.setChargeAmount();
-//        }
-//        return responses;
-//    }
 }

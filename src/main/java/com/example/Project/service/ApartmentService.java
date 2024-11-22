@@ -53,7 +53,8 @@ public class ApartmentService {
         return apartmentRepository.findAll();
     }
     public Apartment getById(String id) {
-        return apartmentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Không tìm thấy mã chung cư"));
+        return apartmentRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy mã chung cư"));
     }
 
     public List<Apartment> search(@Valid  ApartmentSearchRequest request) {
