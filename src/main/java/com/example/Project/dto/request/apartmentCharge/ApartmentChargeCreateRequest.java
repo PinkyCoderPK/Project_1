@@ -5,6 +5,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Builder
@@ -21,11 +22,11 @@ public class ApartmentChargeCreateRequest {
 
     @Builder.Default
     @PositiveOrZero(message = "Số lượng phải là số không âm")
-    Double unitQuantity = (double) 0;
+    BigDecimal unitQuantity =  BigDecimal.ZERO;;
 
     @Builder.Default
     @PositiveOrZero(message = "Số tiền đã thanh toán phải là số không âm")
-    Double amountPaid = (double) 0;
+    BigDecimal amountPaid =  BigDecimal.ZERO;;
 
     @NotNull(message = "Ngày bắt đầu thu phí không được để trống")
     LocalDateTime chargeDate;

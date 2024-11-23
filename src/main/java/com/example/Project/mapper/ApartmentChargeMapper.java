@@ -16,7 +16,6 @@ public interface ApartmentChargeMapper {
     @Mapping(source = "charge.id", target = "chargeId")
     @Mapping(source = "apartment.apartmentName", target = "apartmentName")
     @Mapping(source = "charge.chargeName", target = "chargeName")
-    @Mapping(source = "id", target = "id")
     ApartmentChargeResponse toApartmentChargeResponse(ApartmentCharge apartmentCharge);
     void mapUpdateApartmentCharge(@MappingTarget ApartmentCharge apartmentCharge, ApartmentChargeUpdateRequest request);
 }
