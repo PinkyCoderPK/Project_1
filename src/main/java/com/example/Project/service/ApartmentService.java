@@ -53,6 +53,7 @@ public class ApartmentService {
     public List<Apartment> getAll(){
         return apartmentRepository.findAll();
     }
+
     public Apartment getById(String id) {
         return apartmentRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Không tìm thấy mã chung cư"));
@@ -70,6 +71,7 @@ public class ApartmentService {
     public void deleteById(String id) {
         apartmentRepository.deleteById(id);
     }
+
     public void deleteAll(){
         apartmentRepository.deleteAll();
     }

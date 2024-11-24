@@ -9,6 +9,7 @@ import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.mapper.ApartmentChargeMapper;
 import com.example.Project.service.ApartmentChargeService;
 import jakarta.validation.Valid;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 @RestController
 @RequestMapping("/project/apartmentCharge")
 public class ApartmentChargeController {
@@ -36,20 +38,6 @@ public class ApartmentChargeController {
                 .build();
     }
 
-    @PostMapping("/createMultiple")
-    public ApiResponse<List<ApartmentChargeResponse>> createMultiple(@RequestBody @Valid List<ApartmentChargeCreateRequest> requests) {
-        List<ApartmentCharge> apartmentCharges = apartmentChargeService.createMultiple(requests);
-        List<ApartmentChargeResponse> responses = new ArrayList<>();
-        for(ApartmentCharge apartmentCharge : apartmentCharges) {
-            ApartmentChargeResponse response = apartmentChargeMapper.toApartmentChargeResponse(apartmentCharge);
-            responses.add(response);
-        }
-        return ApiResponse.<List<ApartmentChargeResponse>>builder()
-                .code(HttpStatus.OK.value())
-                .message("Thành công")
-                .result(responses)
-                .build();
-    }
     @GetMapping
     public ApiResponse<List<ApartmentChargeResponse>> getAll() {
         List<ApartmentCharge> apartmentCharges = apartmentChargeService.getAll();

@@ -38,12 +38,15 @@ public class ChargeService {
         Charge charge = chargeMapper.mapCreateCharge(chargeCreateRequest);
         return chargeRepository.save(charge);
     }
+
     public Charge getById(String id) {
         return chargeRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Không tìm thấy id phi"));
     }
+
     public List<Charge> getAll() {
         return chargeRepository.findAll();
     }
+
     public List<Predicate> createPredicates(ChargeSearchRequest request, CriteriaBuilder criteriaBuilder, Root<Charge> root) {
         List<Predicate> predicates = new ArrayList<>();
         for(Field field : ChargeSearchRequest.class.getDeclaredFields()){
@@ -60,6 +63,7 @@ public class ChargeService {
         }
         return predicates;
     }
+
     public List<Charge> search(@Valid ChargeSearchRequest request) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Charge> criteriaQuery = criteriaBuilder.createQuery(Charge.class);
@@ -68,9 +72,11 @@ public class ChargeService {
         criteriaQuery.select(root).where(predicates.toArray(new Predicate[0]));
         return  entityManager.createQuery(criteriaQuery).getResultList();
     }
+
     public void deleteById(String id) {
         chargeRepository.deleteById(id);
     }
+
     public void deleteAll(){
         chargeRepository.deleteAll();
     }

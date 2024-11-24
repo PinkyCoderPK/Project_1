@@ -3,18 +3,18 @@ package com.example.Project.controller;
 import com.example.Project.dto.request.apartment.ApartmentCreateRequest;
 import com.example.Project.dto.request.apartment.ApartmentSearchRequest;
 import com.example.Project.dto.request.apartment.ApartmentUpdateRequest;
-import com.example.Project.dto.request.apartmentCharge.ApartmentChargeUpdateRequest;
 import com.example.Project.dto.response.ApiResponse;
 import com.example.Project.entity.Apartment;
-import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.service.ApartmentService;
 import jakarta.validation.Valid;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Data
 @RestController
 @RequestMapping("/project/apartment")
 public class ApartmentController {

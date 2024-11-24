@@ -1,5 +1,7 @@
 package com.example.Project.dto.request.bill;
 
+import com.example.Project.dto.request.apartmentCharge.ApartmentChargeCreateRequest;
+import com.example.Project.enums.Enums;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
@@ -15,18 +17,20 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BillCreateRequest {
 
-    @NotNull(message = "Danh sách ApartmentCharge không được để trống")
-    List<String> apartmentChargeIds;
+    @NotNull(message = "Id phòng không được để trống")
+    String apartmentId;
 
+    List<ApartmentChargeCreateRequest> apartmentChargeCreateRequestList;
+
+    @Builder.Default
     @PositiveOrZero(message = "Số tiền đã thanh toán phải là số không âm")
-    BigDecimal totalAmountPaid;
+    BigDecimal totalAmountPaid = BigDecimal.ZERO;
 
     @NotNull(message = "Tháng thu phí không được để trống")
     LocalDateTime month;
 
-    @NotNull(message = "Tình trạng thu phí không được để trống")
-    String status; // Còn thiếu / Trả đủ
+    @Builder.Default
+    Enums.BillStatus status = Enums.BillStatus.UNPAID; // Còn thiếu / Trả đủ
 
-    @NotNull(message = "Phương thức thanh toán không được để trống")
-    String paymentMethod;
+    Enums.PaymentMethod paymentMethod;
 }

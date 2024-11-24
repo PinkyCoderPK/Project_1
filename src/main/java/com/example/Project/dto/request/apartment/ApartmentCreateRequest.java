@@ -32,5 +32,6 @@ public class ApartmentCreateRequest {
 
     private String ownerId;
 
+    @Builder.Default
     private Enums.ApartmentStatus status = Enums.ApartmentStatus.AVAILABLE;
 }

@@ -1,13 +1,14 @@
 package com.example.Project.dto.request.charge;
 
+import com.example.Project.enums.Enums;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
 
+
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,8 +17,8 @@ public class ChargeCreateRequest {
     @NotNull(message = "Tên phí không được để trống")
     String chargeName;
 
-    @NotNull(message = "Yêu cầu nộp không được để trống")
-    Boolean isMandatory; // Có bắt buộc không
+    @NotNull(message = "Loại phí không được để trống")
+    Enums.ChargeType type;
 
     String description;
 
@@ -27,4 +28,8 @@ public class ChargeCreateRequest {
     @NotNull(message = "Đon vị phí không được để trống")
     String unitMeasurement; // Đơn vị đo lường
 
+    @Builder.Default
+    LocalDateTime chargeDate = LocalDateTime.now();
+
+    LocalDateTime dueDate;
 }

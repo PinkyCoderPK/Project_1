@@ -11,7 +11,7 @@ import com.example.Project.service.ResidentService;
 import jakarta.validation.Valid;
 
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
+import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/project/resident")
-@RequiredArgsConstructor
+@Data
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ResidentController {
 

@@ -1,5 +1,6 @@
 package com.example.Project.entity;
 
+import com.example.Project.enums.Enums;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -16,20 +17,23 @@ public class ApartmentCharge {
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "charge_id", referencedColumnName = "id")
-    private Charge charge;
+    Charge charge;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "apartment_id", referencedColumnName = "id")
-    private Apartment apartment;
+    Apartment apartment;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "bill_id", nullable = true)
+    private Bill bill;
 
     BigDecimal chargeAmount;
     BigDecimal unitQuantity;
     BigDecimal amountPaid;
-    LocalDateTime chargeDate;
-    LocalDateTime dueDate;
-    String paymentMethod;
+    @Enumerated(EnumType.STRING)
+    Enums.PaymentMethod paymentMethod;
     LocalDateTime createAt;
     LocalDateTime updateAt;
 

@@ -18,21 +18,21 @@ import lombok.experimental.FieldDefaults;
 public class Resident {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    String id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "apartment_id", referencedColumnName = "id")
-    private Apartment apartment;
+    Apartment apartment;
 
-    private String username;
+    String username;
     @Enumerated(EnumType.STRING)
-    private Enums.ResidentRole role;
-    private String phoneNumber;
-    private LocalDate birthday;
-    private String permanentAddress;
-    private String temporaryAddress;
-    private LocalDateTime createAt;
-    private LocalDateTime updateAt;
+    Enums.ResidentRole role;
+    String phoneNumber;
+    LocalDate birthday;
+    String permanentAddress;
+    String temporaryAddress;
+    LocalDateTime createAt;
+    LocalDateTime updateAt;
 
     @PrePersist
     protected void onCreate() { createAt = LocalDateTime.now();

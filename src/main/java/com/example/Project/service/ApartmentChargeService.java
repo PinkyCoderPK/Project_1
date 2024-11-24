@@ -3,7 +3,6 @@ package com.example.Project.service;
 import com.example.Project.dto.request.apartmentCharge.ApartmentChargeCreateRequest;
 import com.example.Project.dto.request.apartmentCharge.ApartmentChargeSearchRequest;
 import com.example.Project.dto.request.apartmentCharge.ApartmentChargeUpdateRequest;
-import com.example.Project.dto.response.ApartmentChargeResponse;
 import com.example.Project.entity.Apartment;
 import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.entity.Charge;
@@ -13,7 +12,6 @@ import com.example.Project.repository.ApartmentRepository;
 import com.example.Project.repository.ChargeRepository;
 import com.example.Project.utils.PredicateBuilder;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -24,10 +22,8 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Data
 @Service
@@ -57,6 +53,9 @@ public class ApartmentChargeService {
     ChargeService chargeService;
 
     public ApartmentCharge create(ApartmentChargeCreateRequest request) {
+        if (request.getApartmentId() == null || request.getApartmentId().isEmpty()) {
+            throw new IllegalArgumentException("Id phòng không được để trống");
+        }
         Apartment apartment = apartmentService.getById(request.getApartmentId());
         Charge charge = chargeService.getById(request.getChargeId());
 
@@ -65,21 +64,6 @@ public class ApartmentChargeService {
         apartmentCharge.setCharge(charge);
 
         return apartmentChargeRepository.save(apartmentCharge);
-    }
-
-    public List<ApartmentCharge> createMultiple(List<ApartmentChargeCreateRequest> requests) {
-        List<ApartmentCharge> apartmentCharges = new ArrayList<>();
-        for(ApartmentChargeCreateRequest request : requests) {
-            Apartment apartment = apartmentService.getById(request.getApartmentId());
-            Charge charge = chargeService.getById(request.getChargeId());
-
-            ApartmentCharge apartmentCharge = apartmentChargeMapper.toApartmentCharge(request);
-            apartmentCharge.setApartment(apartment);
-            apartmentCharge.setCharge(charge);
-
-            apartmentCharges.add(apartmentCharge);
-        }
-        return apartmentChargeRepository.saveAll(apartmentCharges);
     }
 
     public List<ApartmentCharge> getAll() {

@@ -1,5 +1,6 @@
 package com.example.Project.entity;
 
+import com.example.Project.enums.Enums;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -16,10 +17,13 @@ public class Charge {
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
     String chargeName;
-    Boolean isMandatory; // Có bắt buộc không
+    @Enumerated(EnumType.STRING)
+    Enums.ChargeType type;
     String description;
     BigDecimal unitAmount; // Phí/Đơn vị
     String unitMeasurement; // Đơn vị đo lường
+    LocalDateTime chargeDate;
+    LocalDateTime dueDate;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 

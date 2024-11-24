@@ -11,12 +11,14 @@ import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.entity.Charge;
 import com.example.Project.service.ChargeService;
 import jakarta.validation.Valid;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Data
 @RestController
 @RequestMapping("/project/charge")
 public class ChargeController {

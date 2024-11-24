@@ -1,9 +1,11 @@
 package com.example.Project.entity;
 
+import com.example.Project.enums.Enums;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.Cascade;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -14,29 +16,26 @@ import java.util.List;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Bill {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "apartment_id", referencedColumnName = "id")
-//    Apartment apartment;
+    String apartmentId;
 
-    @OneToMany(mappedBy = "bill", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "bill", cascade = CascadeType.MERGE, orphanRemoval = true)
     List<ApartmentCharge> apartmentChargeList;
-
+    
     BigDecimal totalPaymentAmount;
     BigDecimal totalAmountPaid;
     BigDecimal totalAmountDue;
     LocalDateTime month;
-    String status; // Còn thiếu / Trả đủ
-    String paymentMethod; // Tiền mặt / Chuyển khoản / Quét thẻ
+    Enums.BillStatus status; // Còn thiếu / Trả đủ
+    Enums.PaymentMethod paymentMethod; // Tiền mặt / Chuyển khoản / Quét thẻ
     LocalDateTime createAt;
     LocalDateTime updateAt;
 
     // tinh totalPaymentAmount
-    public void totalPayment() {
+    public void setTotalPaymentAmount() {
         if (apartmentChargeList == null || apartmentChargeList.isEmpty()) {
             totalPaymentAmount = BigDecimal.ZERO;
             return;
@@ -44,14 +43,14 @@ public class Bill {
 
         totalPaymentAmount = BigDecimal.ZERO;
 
-        for (ApartmentCharge charge : apartmentChargeList) {
-            if (charge.getChargeAmount() != null) {
-                totalPaymentAmount = totalPaymentAmount.add(charge.getChargeAmount());
+        for (ApartmentCharge apartmentCharge : apartmentChargeList) {
+            if (apartmentCharge.getChargeAmount() != null) {
+                totalPaymentAmount = totalPaymentAmount.add(apartmentCharge.getChargeAmount());
             }
         }
     }
     // tinh totalAmountDue
-    public void calculateTotalAmountDue() {
+    public void setTotalAmountDue() {
         if (totalPaymentAmount == null) {
             totalPaymentAmount = BigDecimal.ZERO;
         }
@@ -68,14 +67,14 @@ public class Bill {
     @PrePersist
     protected void onCreate() {
         createAt = LocalDateTime.now();
-        totalPayment();
-        calculateTotalAmountDue();
+        setTotalPaymentAmount();
+        setTotalAmountDue();
     }
 
     @PreUpdate
     protected void onUpdate() {
         updateAt = LocalDateTime.now();
-        totalPayment();
-        calculateTotalAmountDue();
+        setTotalPaymentAmount();
+        setTotalAmountDue();
     }
 }

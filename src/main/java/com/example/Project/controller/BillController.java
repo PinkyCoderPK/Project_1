@@ -5,12 +5,16 @@ package com.example.Project.controller;
 import com.example.Project.dto.request.bill.BillCreateRequest;
 import com.example.Project.dto.request.bill.BillSearchRequest;
 import com.example.Project.dto.request.bill.BillUpdateRequest;
+import com.example.Project.dto.response.ApartmentChargeForBillResponse;
 import com.example.Project.dto.response.ApiResponse;
 import com.example.Project.dto.response.BillResponse;
+import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.entity.Bill;
+import com.example.Project.mapper.ApartmentChargeMapper;
 import com.example.Project.mapper.BillMapper;
 import com.example.Project.service.BillService;
 import jakarta.validation.Valid;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,24 +22,36 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 @RestController
 @RequestMapping("/project/bill")
 public class BillController {
     @Autowired
     private BillService billService;
+
     @Autowired
     private BillMapper billMapper;
+
+    @Autowired
+    private ApartmentChargeMapper apartmentChargeMapper;
 
     @PostMapping
     public ApiResponse<BillResponse> create(@RequestBody @Valid BillCreateRequest request) {
         Bill bill = billService.create(request);
+        List<ApartmentChargeForBillResponse> apartmentChargeForBillResponseList = new ArrayList<>();
+        for(ApartmentCharge apartmentCharge : bill.getApartmentChargeList()) {
+            ApartmentChargeForBillResponse apartmentChargeForBillResponse = apartmentChargeMapper.toApartmentChargeForBillResponse(apartmentCharge);
+            apartmentChargeForBillResponseList.add(apartmentChargeForBillResponse);
+        }
         BillResponse response = billMapper.toBillResponse(bill);
+        response.setApartmentCharges(apartmentChargeForBillResponseList);
         return ApiResponse.<BillResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
                 .result(response)
                 .build();
     }
+
     @GetMapping
     public ApiResponse<List<BillResponse>> getAll() {
         List<Bill> bills = billService.getAll();
@@ -77,16 +93,16 @@ public class BillController {
                 .build();
     }
 
-    @PatchMapping("/{id}")
-    public ApiResponse<BillResponse> updateById (@PathVariable String id, @RequestBody @Valid BillUpdateRequest request) {
-        Bill bill = billService.updateById(id, request);
-        BillResponse response = billMapper.toBillResponse(bill);
-        return ApiResponse.<BillResponse>builder()
-                .code(HttpStatus.OK.value())
-                .message("Thành công")
-                .result(response)
-                .build();
-    }
+//    @PatchMapping("/{id}")
+//    public ApiResponse<BillResponse> updateById (@PathVariable String id, @RequestBody @Valid BillUpdateRequest request) {
+//        Bill bill = billService.updateById(id, request);
+//        BillResponse response = billMapper.toBillResponse(bill);
+//        return ApiResponse.<BillResponse>builder()
+//                .code(HttpStatus.OK.value())
+//                .message("Thành công")
+//                .result(response)
+//                .build();
+//    }
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> deleteById(@PathVariable String id) {

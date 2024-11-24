@@ -12,9 +12,11 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface BillMapper {
-    @Mapping(target = "apartmentChargeList", ignore = true)
+    @Mapping(source = "apartmentId", target = "apartmentId")
     Bill toBill(BillCreateRequest request);
+
     BillResponse toBillResponse(Bill bill);
+
     void mapBill(@MappingTarget Bill bill, BillUpdateRequest request);
 
 }

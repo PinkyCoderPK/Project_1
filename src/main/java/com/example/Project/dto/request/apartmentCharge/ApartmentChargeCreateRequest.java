@@ -1,5 +1,8 @@
 package com.example.Project.dto.request.apartmentCharge;
 
+import com.example.Project.enums.Enums;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
@@ -14,7 +17,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ApartmentChargeCreateRequest {
-    @NotNull(message = "Id phòng không được để trống")
     String apartmentId;
 
     @NotNull(message = "Id phí không được để trống")
@@ -28,11 +30,5 @@ public class ApartmentChargeCreateRequest {
     @PositiveOrZero(message = "Số tiền đã thanh toán phải là số không âm")
     BigDecimal amountPaid =  BigDecimal.ZERO;;
 
-    @NotNull(message = "Ngày bắt đầu thu phí không được để trống")
-    LocalDateTime chargeDate;
-
-    @NotNull(message = "Hạn thu phí không được để trống")
-    LocalDateTime dueDate;
-
-    String paymentMethod;
+    Enums.PaymentMethod paymentMethod;
 }

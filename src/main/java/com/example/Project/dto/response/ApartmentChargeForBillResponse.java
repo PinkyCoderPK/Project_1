@@ -8,19 +8,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ApartmentChargeResponse {
-    String id;
-    String apartmentId;
-    String apartmentName;
+public class ApartmentChargeForBillResponse {
     String chargeId;
     String chargeName;
-    BigDecimal chargeAmount;
     BigDecimal unitQuantity;
-    BigDecimal amountPaid;
-    Enums.PaymentMethod paymentMethod;
-    LocalDateTime createAt;
-    LocalDateTime updateAt;
+    BigDecimal chargeAmount;
 }
