@@ -1,13 +1,8 @@
 package com.example.Project.controller;
 
-import com.example.Project.dto.request.apartmentCharge.ApartmentChargeCreateRequest;
-import com.example.Project.dto.request.apartmentCharge.ApartmentChargeSearchRequest;
-import com.example.Project.dto.request.apartmentCharge.ApartmentChargeUpdateRequest;
-import com.example.Project.dto.request.charge.ChargeCreateRequest;
+import com.example.Project.dto.request.charge.ChargeRequest;
 import com.example.Project.dto.request.charge.ChargeSearchRequest;
-import com.example.Project.dto.request.charge.ChargeUpdateRequest;
 import com.example.Project.dto.response.ApiResponse;
-import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.entity.Charge;
 import com.example.Project.service.ChargeService;
 import jakarta.validation.Valid;
@@ -26,7 +21,7 @@ public class ChargeController {
     private ChargeService chargeService;
 
     @PostMapping
-    public ApiResponse<Charge> create(@RequestBody @Valid ChargeCreateRequest request) {
+    public ApiResponse<Charge> create(@RequestBody @Valid ChargeRequest request) {
         return ApiResponse.<Charge>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
@@ -58,7 +53,7 @@ public class ChargeController {
                 .build();
     }
     @PatchMapping("/{id}")
-    public ApiResponse<Charge> updateById (@PathVariable String id, @RequestBody @Valid ChargeUpdateRequest request) {
+    public ApiResponse<Charge> updateById (@PathVariable String id, @RequestBody @Valid ChargeRequest request) {
         return ApiResponse.<Charge>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")

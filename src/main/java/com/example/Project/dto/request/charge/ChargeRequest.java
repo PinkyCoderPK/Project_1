@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ChargeCreateRequest {
+public class ChargeRequest {
     @NotNull(message = "Tên phí không được để trống")
     String chargeName;
 

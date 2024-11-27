@@ -22,7 +22,7 @@ public class Bill {
 
     String apartmentId;
 
-    @OneToMany(mappedBy = "bill", cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OneToMany(mappedBy = "bill", cascade = {CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     List<ApartmentCharge> apartmentChargeList;
     
     BigDecimal totalPaymentAmount;
@@ -61,8 +61,6 @@ public class Bill {
 
         totalAmountDue = totalPaymentAmount.subtract(totalAmountPaid);
     }
-
-
 
     @PrePersist
     protected void onCreate() {

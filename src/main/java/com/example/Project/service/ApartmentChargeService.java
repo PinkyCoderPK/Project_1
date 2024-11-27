@@ -1,8 +1,7 @@
 package com.example.Project.service;
 
-import com.example.Project.dto.request.apartmentCharge.ApartmentChargeCreateRequest;
+import com.example.Project.dto.request.apartmentCharge.ApartmentChargeRequest;
 import com.example.Project.dto.request.apartmentCharge.ApartmentChargeSearchRequest;
-import com.example.Project.dto.request.apartmentCharge.ApartmentChargeUpdateRequest;
 import com.example.Project.entity.Apartment;
 import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.entity.Charge;
@@ -52,10 +51,7 @@ public class ApartmentChargeService {
     @Autowired
     ChargeService chargeService;
 
-    public ApartmentCharge create(ApartmentChargeCreateRequest request) {
-        if (request.getApartmentId() == null || request.getApartmentId().isEmpty()) {
-            throw new IllegalArgumentException("Id phòng không được để trống");
-        }
+    public ApartmentCharge create(ApartmentChargeRequest request) {
         Apartment apartment = apartmentService.getById(request.getApartmentId());
         Charge charge = chargeService.getById(request.getChargeId());
 
@@ -77,19 +73,14 @@ public class ApartmentChargeService {
 
     public List<ApartmentCharge> search(@Valid ApartmentChargeSearchRequest request) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-
         // Xác định kiểu đối tượng trả về
         CriteriaQuery<ApartmentCharge> query = criteriaBuilder.createQuery(ApartmentCharge.class);
-
         // Đối tượng root đại diện cho bảng ApartmentCharge, cho phép truy cập vào các trường của bảng
         Root<ApartmentCharge> root = query.from(ApartmentCharge.class);
-
         // Danh sách các điều kiện truy vấn
         List<Predicate> predicates = predicateBuilder.createPredicatesToSearch(request, criteriaBuilder, root);
-
         // Thực hiện truy vấn
         query.select(root).where(predicates.toArray(new Predicate[0]));
-
         return entityManager.createQuery(query).getResultList();
     }
 
@@ -101,13 +92,13 @@ public class ApartmentChargeService {
         apartmentChargeRepository.deleteAll();
     }
 
-    public ApartmentCharge updateById(String id, ApartmentChargeUpdateRequest request) {
+    public ApartmentCharge updateById(String id, ApartmentChargeRequest request) {
         ApartmentCharge apartmentCharge = getById(id);
 
         Apartment apartment = apartmentService.getById(request.getApartmentId());
         Charge charge = chargeService.getById(request.getChargeId());
 
-        apartmentChargeMapper.mapUpdateApartmentCharge(apartmentCharge, request);
+        apartmentChargeMapper.mapApartmentCharge(apartmentCharge, request);
         apartmentCharge.setApartment(apartment);
         apartmentCharge.setCharge(charge);
 

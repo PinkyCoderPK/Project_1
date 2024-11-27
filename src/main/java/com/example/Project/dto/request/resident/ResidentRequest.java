@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ResidentCreateRequest {
+public class ResidentRequest {
 
     @NotNull(message = "Id căn hộ không được để trống")
     String apartmentId;

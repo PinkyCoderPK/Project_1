@@ -1,8 +1,7 @@
 package com.example.Project.controller;
 
-import com.example.Project.dto.request.apartmentCharge.ApartmentChargeCreateRequest;
+import com.example.Project.dto.request.apartmentCharge.ApartmentChargeRequest;
 import com.example.Project.dto.request.apartmentCharge.ApartmentChargeSearchRequest;
-import com.example.Project.dto.request.apartmentCharge.ApartmentChargeUpdateRequest;
 import com.example.Project.dto.response.ApartmentChargeResponse;
 import com.example.Project.dto.response.ApiResponse;
 import com.example.Project.entity.ApartmentCharge;
@@ -28,7 +27,7 @@ public class ApartmentChargeController {
     private ApartmentChargeMapper apartmentChargeMapper;
 
     @PostMapping
-    public ApiResponse<ApartmentChargeResponse> create(@RequestBody @Valid ApartmentChargeCreateRequest request) {
+    public ApiResponse<ApartmentChargeResponse> create(@RequestBody @Valid ApartmentChargeRequest request) {
         ApartmentCharge apartmentCharge = apartmentChargeService.create(request);
         ApartmentChargeResponse response = apartmentChargeMapper.toApartmentChargeResponse(apartmentCharge);
         return ApiResponse.<ApartmentChargeResponse>builder()
@@ -40,12 +39,8 @@ public class ApartmentChargeController {
 
     @GetMapping
     public ApiResponse<List<ApartmentChargeResponse>> getAll() {
-        List<ApartmentCharge> apartmentCharges = apartmentChargeService.getAll();
-        List<ApartmentChargeResponse> responses = new ArrayList<>();
-        for(ApartmentCharge apartmentCharge : apartmentCharges) {
-            ApartmentChargeResponse response = apartmentChargeMapper.toApartmentChargeResponse(apartmentCharge);
-            responses.add(response);
-        }
+        List<ApartmentCharge> apartmentChargeList = apartmentChargeService.getAll();
+        List<ApartmentChargeResponse> responses = apartmentChargeMapper.toApartmentChargeResponseList(apartmentChargeList);
         return ApiResponse.<List<ApartmentChargeResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
@@ -66,12 +61,8 @@ public class ApartmentChargeController {
 
     @PostMapping("/search")
     public ApiResponse<List<ApartmentChargeResponse>> search(@RequestBody @Valid ApartmentChargeSearchRequest request) {
-        List<ApartmentCharge> apartmentCharges = apartmentChargeService.search(request);
-        List<ApartmentChargeResponse> responses = new ArrayList<>();
-        for(ApartmentCharge apartmentCharge : apartmentCharges) {
-            ApartmentChargeResponse response = apartmentChargeMapper.toApartmentChargeResponse(apartmentCharge);
-            responses.add(response);
-        }
+        List<ApartmentCharge> apartmentChargeList = apartmentChargeService.search(request);
+        List<ApartmentChargeResponse> responses = apartmentChargeMapper.toApartmentChargeResponseList(apartmentChargeList);
         return ApiResponse.<List<ApartmentChargeResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
@@ -80,7 +71,7 @@ public class ApartmentChargeController {
     }
 
     @PatchMapping("/{id}")
-    public ApiResponse<ApartmentChargeResponse> updateById (@PathVariable String id, @RequestBody @Valid ApartmentChargeUpdateRequest request) {
+    public ApiResponse<ApartmentChargeResponse> updateById (@PathVariable String id, @RequestBody @Valid ApartmentChargeRequest request) {
         ApartmentCharge apartmentCharge = apartmentChargeService.updateById(id, request);
         ApartmentChargeResponse response = apartmentChargeMapper.toApartmentChargeResponse(apartmentCharge);
         return ApiResponse.<ApartmentChargeResponse>builder()

@@ -1,9 +1,8 @@
 package com.example.Project.service;
 
 
-import com.example.Project.dto.request.apartment.ApartmentCreateRequest;
+import com.example.Project.dto.request.apartment.ApartmentRequest;
 import com.example.Project.dto.request.apartment.ApartmentSearchRequest;
-import com.example.Project.dto.request.apartment.ApartmentUpdateRequest;
 import com.example.Project.entity.Apartment;
 import com.example.Project.entity.Resident;
 import com.example.Project.enums.Enums;
@@ -45,8 +44,8 @@ public class ApartmentService {
     @Autowired
     private PredicateBuilder predicateBuilder;
 
-    public Apartment create(ApartmentCreateRequest apartmentCreateRequest) {
-        Apartment apartment = apartmentMapper.mapCreateApartment(apartmentCreateRequest);
+    public Apartment create(ApartmentRequest apartmentRequest) {
+        Apartment apartment = apartmentMapper.toApartment(apartmentRequest);
         return apartmentRepository.save(apartment);
     }
 
@@ -76,19 +75,19 @@ public class ApartmentService {
         apartmentRepository.deleteAll();
     }
 
-    public Apartment updateById(String id, ApartmentUpdateRequest apartmentUpdateRequest) {
-        Optional<Resident> resident = residentRepository.findById(apartmentUpdateRequest.getOwnerId());
+    public Apartment updateById(String id, ApartmentRequest apartmentRequest) {
+        Optional<Resident> resident = residentRepository.findById(apartmentRequest.getOwnerId());
         if (resident.isEmpty()) {
-            if (apartmentUpdateRequest.getStatus() != Enums.ApartmentStatus.AVAILABLE) {
+            if (apartmentRequest.getStatus() != Enums.ApartmentStatus.AVAILABLE) {
                 throw new NoSuchElementException("Không tìm thấy cư dân");
             }
         } else {
-            if (Enums.ApartmentStatus.AVAILABLE.equals(apartmentUpdateRequest.getStatus())) {
+            if (Enums.ApartmentStatus.AVAILABLE.equals(apartmentRequest.getStatus())) {
                 throw new NoSuchElementException("Cần cập nhật lại trạng thái căn hộ");
             }
         }
         Apartment apartment = getById(id);
-        apartmentMapper.mapUpdateApartment(apartment, apartmentUpdateRequest);
+        apartmentMapper.mapApartment(apartment, apartmentRequest);
         return apartmentRepository.save(apartment);
     }
 }

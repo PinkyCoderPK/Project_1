@@ -1,9 +1,10 @@
 package com.example.Project.service;
-import com.example.Project.dto.request.apartmentCharge.ApartmentChargeCreateRequest;
-import com.example.Project.dto.request.bill.BillCreateRequest;
+import com.example.Project.dto.request.apartmentCharge.ApartmentChargeRequest;
+import com.example.Project.dto.request.bill.BillRequest;
 import com.example.Project.dto.request.bill.BillSearchRequest;
 import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.entity.Bill;
+import com.example.Project.mapper.ApartmentChargeMapper;
 import com.example.Project.mapper.BillMapper;
 import com.example.Project.repository.ApartmentChargeRepository;
 import com.example.Project.repository.BillRepository;
@@ -14,12 +15,14 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class BillService {
@@ -39,17 +42,22 @@ public class BillService {
     @Autowired
     private ApartmentChargeService apartmentChargeService;
 
+    @Autowired
+    private ApartmentChargeMapper apartmentChargeMapper;
+
     @PersistenceContext
     private EntityManager entityManager;
 
-    public Bill create(BillCreateRequest request) {
+    @Transactional
+    public Bill create(BillRequest request) {
         List<ApartmentCharge> apartmentChargeList = new ArrayList<>();
-        for(ApartmentChargeCreateRequest request1 : request.getApartmentChargeCreateRequestList()) {
+        Bill bill = billMapper.toBill(request);
+        for(ApartmentChargeRequest request1 : request.getApartmentChargeRequestList()) {
             request1.setApartmentId(request.getApartmentId());
             ApartmentCharge apartmentCharge = apartmentChargeService.create(request1);
+            apartmentCharge.setBill(bill);
             apartmentChargeList.add(apartmentCharge);
         }
-        Bill bill = billMapper.toBill(request);
         bill.setApartmentChargeList(apartmentChargeList);
         return billRepository.save(bill);
     }
@@ -59,7 +67,8 @@ public class BillService {
     }
 
     public Bill getById(String id) {
-        return billRepository.findById(id).get();
+        return billRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Không tìm thấy hóa đơn"));
     }
 
     public List<Bill> search(@Valid BillSearchRequest request) {
@@ -71,6 +80,7 @@ public class BillService {
         return entityManager.createQuery(query).getResultList();
     }
 
+    @Transactional
     public void deleteById(String id) {
         billRepository.deleteById(id);
     }
@@ -79,20 +89,22 @@ public class BillService {
         billRepository.deleteAll();
     }
 
-//    public Bill updateById(String id, BillUpdateRequest request) {
-//        Bill bill = getById(id);
-//
-//        billMapper.mapBill(bill, request);
-//        List<ApartmentCharge> apartmentCharges = apartmentChargeRepository.findAllById(request.getApartmentChargeIds());
-//        if (apartmentCharges.isEmpty() || apartmentCharges.size() != request.getApartmentChargeIds().size()) {
-//            throw new IllegalArgumentException("Một số ApartmentCharge ID không tồn tại trong hệ thống.");
-//        }
-//        bill.totalPayment();
-//        bill.calculateTotalAmountDue();
-//        bill.setApartmentChargeList(apartmentCharges);
-//
-//        return billRepository.save(bill);
-//    }
-
+    @Transactional
+    public Bill updateById(String id, BillRequest request) {
+        Bill bill = getById(id);
+        List<ApartmentCharge> apartmentChargeList = bill.getApartmentChargeList();
+        List<ApartmentChargeRequest> apartmentChargeRequestList = request.getApartmentChargeRequestList();
+        List<ApartmentCharge> updateApartmentChargeList = new ArrayList<>();
+        for (int i = 0;i < apartmentChargeList.size();i++)
+        {
+            ApartmentCharge apartmentCharge = apartmentChargeList.get(i);
+            ApartmentChargeRequest apartmentChargeRequest = apartmentChargeRequestList.get(i);
+            apartmentChargeMapper.mapApartmentCharge(apartmentCharge, apartmentChargeRequest);
+            updateApartmentChargeList.add(apartmentCharge);
+        }
+        bill.setApartmentChargeList(updateApartmentChargeList);
+        billMapper.mapBill(bill, request);
+        return billRepository.save(bill);
+    }
 
 }

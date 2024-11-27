@@ -17,17 +17,17 @@ public class ApartmentCharge {
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "charge_id", referencedColumnName = "id")
     Charge charge;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "apartment_id", referencedColumnName = "id")
     Apartment apartment;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "bill_id", nullable = true)
-    private Bill bill;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "bill_id", referencedColumnName = "id")
+    Bill bill;
 
     BigDecimal chargeAmount;
     BigDecimal unitQuantity;

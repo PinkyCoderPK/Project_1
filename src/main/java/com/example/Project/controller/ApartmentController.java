@@ -1,8 +1,7 @@
 package com.example.Project.controller;
 
-import com.example.Project.dto.request.apartment.ApartmentCreateRequest;
+import com.example.Project.dto.request.apartment.ApartmentRequest;
 import com.example.Project.dto.request.apartment.ApartmentSearchRequest;
-import com.example.Project.dto.request.apartment.ApartmentUpdateRequest;
 import com.example.Project.dto.response.ApiResponse;
 import com.example.Project.entity.Apartment;
 import com.example.Project.service.ApartmentService;
@@ -23,11 +22,11 @@ public class ApartmentController {
     private ApartmentService apartmentService;
 
     @PostMapping
-    public ApiResponse<Apartment> create(@RequestBody @Valid ApartmentCreateRequest apartmentCreateRequest) {
+    public ApiResponse<Apartment> create(@RequestBody @Valid ApartmentRequest apartmentRequest) {
         return ApiResponse.<Apartment>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
-                .result(apartmentService.create(apartmentCreateRequest))
+                .result(apartmentService.create(apartmentRequest))
                 .build();
     }
     @GetMapping
@@ -56,7 +55,7 @@ public class ApartmentController {
                 .build();
     }
     @PatchMapping("/{id}")
-    public ApiResponse<Apartment> updateById (@PathVariable String id, @RequestBody @Valid ApartmentUpdateRequest request) {
+    public ApiResponse<Apartment> updateById (@PathVariable String id, @RequestBody @Valid ApartmentRequest request) {
         return ApiResponse.<Apartment>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")

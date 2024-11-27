@@ -1,8 +1,7 @@
 package com.example.Project.controller;
 
 
-import com.example.Project.dto.request.resident.ResidentCreateRequest;
-import com.example.Project.dto.request.resident.ResidentUpdateRequest;
+import com.example.Project.dto.request.resident.ResidentRequest;
 import com.example.Project.dto.response.ApiResponse;
 import com.example.Project.dto.response.ResidentResponse;
 import com.example.Project.entity.Resident;
@@ -33,7 +32,7 @@ public class ResidentController {
     ResidentMapper residentMapper;
 
     @PostMapping
-    ApiResponse<ResidentResponse> create(@RequestBody @Valid ResidentCreateRequest request){
+    ApiResponse<ResidentResponse> create(@RequestBody @Valid ResidentRequest request){
         Resident resident = residentService.create(request);
         ResidentResponse response = residentMapper.toResidentResponse(resident);
         return ApiResponse.<ResidentResponse>builder()
@@ -70,7 +69,7 @@ public class ResidentController {
     }
 
     @PutMapping("/{id}")
-    ApiResponse<ResidentResponse> updateById(@PathVariable String id,@RequestBody @Valid ResidentUpdateRequest request){
+    ApiResponse<ResidentResponse> updateById(@PathVariable String id,@RequestBody @Valid ResidentRequest request){
         Resident resident = residentService.updateById(id, request);
         ResidentResponse response = residentMapper.toResidentResponse(resident);
         return ApiResponse.<ResidentResponse>builder()

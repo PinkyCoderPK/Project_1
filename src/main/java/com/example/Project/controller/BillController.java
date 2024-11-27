@@ -2,9 +2,8 @@ package com.example.Project.controller;
 
 
 
-import com.example.Project.dto.request.bill.BillCreateRequest;
+import com.example.Project.dto.request.bill.BillRequest;
 import com.example.Project.dto.request.bill.BillSearchRequest;
-import com.example.Project.dto.request.bill.BillUpdateRequest;
 import com.example.Project.dto.response.ApartmentChargeForBillResponse;
 import com.example.Project.dto.response.ApiResponse;
 import com.example.Project.dto.response.BillResponse;
@@ -36,15 +35,10 @@ public class BillController {
     private ApartmentChargeMapper apartmentChargeMapper;
 
     @PostMapping
-    public ApiResponse<BillResponse> create(@RequestBody @Valid BillCreateRequest request) {
+    public ApiResponse<BillResponse> create(@RequestBody @Valid BillRequest request) {
         Bill bill = billService.create(request);
-        List<ApartmentChargeForBillResponse> apartmentChargeForBillResponseList = new ArrayList<>();
-        for(ApartmentCharge apartmentCharge : bill.getApartmentChargeList()) {
-            ApartmentChargeForBillResponse apartmentChargeForBillResponse = apartmentChargeMapper.toApartmentChargeForBillResponse(apartmentCharge);
-            apartmentChargeForBillResponseList.add(apartmentChargeForBillResponse);
-        }
-        BillResponse response = billMapper.toBillResponse(bill);
-        response.setApartmentCharges(apartmentChargeForBillResponseList);
+        BillResponse response = billMapper.toBillResponse(bill, apartmentChargeMapper);
+        System.out.println(response.getApartmentChargeList());
         return ApiResponse.<BillResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
@@ -57,7 +51,7 @@ public class BillController {
         List<Bill> bills = billService.getAll();
         List<BillResponse> responses = new ArrayList<>();
         for(Bill bill : bills) {
-            BillResponse response = billMapper.toBillResponse(bill);
+            BillResponse response = billMapper.toBillResponse(bill, apartmentChargeMapper);
             responses.add(response);
         }
         return ApiResponse.<List<BillResponse>>builder()
@@ -70,7 +64,7 @@ public class BillController {
     @GetMapping("/{id}")
     public ApiResponse<BillResponse> getById(@PathVariable String id) {
         Bill bill = billService.getById(id);
-        BillResponse response = billMapper.toBillResponse(bill);
+        BillResponse response = billMapper.toBillResponse(bill, apartmentChargeMapper);
         return ApiResponse.<BillResponse>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
@@ -80,12 +74,8 @@ public class BillController {
 
     @PostMapping("/search")
     public ApiResponse<List<BillResponse>> search(@RequestBody @Valid BillSearchRequest request) {
-        List<Bill> bills = billService.search(request);
-        List<BillResponse> responses = new ArrayList<>();
-        for(Bill bill : bills) {
-            BillResponse response = billMapper.toBillResponse(bill);
-            responses.add(response);
-        }
+        List<Bill> billList = billService.search(request);
+        List<BillResponse> responses = billMapper.toBillResponseList(billList);
         return ApiResponse.<List<BillResponse>>builder()
                 .code(HttpStatus.OK.value())
                 .message("Thành công")
@@ -93,16 +83,16 @@ public class BillController {
                 .build();
     }
 
-//    @PatchMapping("/{id}")
-//    public ApiResponse<BillResponse> updateById (@PathVariable String id, @RequestBody @Valid BillUpdateRequest request) {
-//        Bill bill = billService.updateById(id, request);
-//        BillResponse response = billMapper.toBillResponse(bill);
-//        return ApiResponse.<BillResponse>builder()
-//                .code(HttpStatus.OK.value())
-//                .message("Thành công")
-//                .result(response)
-//                .build();
-//    }
+    @PatchMapping("/{id}")
+    public ApiResponse<BillResponse> updateById (@PathVariable String id, @RequestBody @Valid BillRequest request) {
+        Bill bill = billService.updateById(id, request);
+        BillResponse response = billMapper.toBillResponse(bill, apartmentChargeMapper);
+        return ApiResponse.<BillResponse>builder()
+                .code(HttpStatus.OK.value())
+                .message("Thành công")
+                .result(response)
+                .build();
+    }
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> deleteById(@PathVariable String id) {

@@ -1,7 +1,6 @@
 package com.example.Project.service;
 
-import com.example.Project.dto.request.resident.ResidentCreateRequest;
-import com.example.Project.dto.request.resident.ResidentUpdateRequest;
+import com.example.Project.dto.request.resident.ResidentRequest;
 import com.example.Project.entity.Apartment;
 import com.example.Project.entity.Resident;
 import com.example.Project.mapper.ResidentMapper;
@@ -27,7 +26,7 @@ public class ResidentService {
     @Autowired
     ApartmentService apartmentService;
 
-    public Resident create(@Valid ResidentCreateRequest request){
+    public Resident create(@Valid ResidentRequest request){
         Resident resident = residentMapper.toResident(request);
         Apartment apartment = apartmentService.getById(request.getApartmentId());
         resident.setApartment(apartment);
@@ -43,10 +42,10 @@ public class ResidentService {
                 .orElseThrow(()-> new NoSuchElementException("Không tìm thấy cư dân"));
     }
 
-    public Resident updateById(String id, @Valid ResidentUpdateRequest request){
+    public Resident updateById(String id, @Valid ResidentRequest request){
         Resident resident = getById(id);
         Apartment apartment = apartmentService.getById(request.getApartmentId());
-        residentMapper.mapUpdateResident(resident, request);
+        residentMapper.mapResident(resident, request);
         resident.setApartment(apartment);
 
         return residentRepository.save(resident);

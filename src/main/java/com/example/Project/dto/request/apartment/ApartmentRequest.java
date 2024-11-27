@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApartmentCreateRequest {
+public class ApartmentRequest {
 
     @NotNull(message = "Tên căn hộ không được để trống")
     private String apartmentName;

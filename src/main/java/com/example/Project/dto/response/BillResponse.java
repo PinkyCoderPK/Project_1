@@ -18,7 +18,7 @@ public class BillResponse {
 
     String id;
     String apartmentId;
-    List<ApartmentChargeForBillResponse> apartmentCharges;
+    List<ApartmentChargeForBillResponse> apartmentChargeList;
     BigDecimal totalPaymentAmount;
     BigDecimal totalAmountPaid;
     BigDecimal totalAmountDue;

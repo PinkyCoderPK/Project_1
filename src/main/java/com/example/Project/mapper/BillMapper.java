@@ -1,7 +1,6 @@
 package com.example.Project.mapper;
 
-import com.example.Project.dto.request.bill.BillCreateRequest;
-import com.example.Project.dto.request.bill.BillUpdateRequest;
+import com.example.Project.dto.request.bill.BillRequest;
 import com.example.Project.dto.response.BillResponse;
 import com.example.Project.entity.Bill;
 import org.mapstruct.Mapper;
@@ -9,14 +8,18 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+import java.util.List;
+
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface BillMapper {
-    @Mapping(source = "apartmentId", target = "apartmentId")
-    Bill toBill(BillCreateRequest request);
+    Bill toBill(BillRequest request);
 
-    BillResponse toBillResponse(Bill bill);
+    @Mapping(target = "apartmentChargeList", expression = "java(apartmentChargeMapper.toApartmentChargeForBillResponseList(bill.getApartmentChargeList()))")
+    BillResponse toBillResponse(Bill bill, ApartmentChargeMapper apartmentChargeMapper);
 
-    void mapBill(@MappingTarget Bill bill, BillUpdateRequest request);
+    List<BillResponse> toBillResponseList(List<Bill> billList);
+
+    void mapBill(@MappingTarget Bill bill, BillRequest request);
 
 }

@@ -1,8 +1,7 @@
 package com.example.Project.service;
 
-import com.example.Project.dto.request.charge.ChargeCreateRequest;
+import com.example.Project.dto.request.charge.ChargeRequest;
 import com.example.Project.dto.request.charge.ChargeSearchRequest;
-import com.example.Project.dto.request.charge.ChargeUpdateRequest;
 import com.example.Project.entity.Charge;
 import com.example.Project.mapper.ChargeMapper;
 import com.example.Project.repository.ChargeRepository;
@@ -34,8 +33,8 @@ public class ChargeService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public Charge create(ChargeCreateRequest chargeCreateRequest) {
-        Charge charge = chargeMapper.mapCreateCharge(chargeCreateRequest);
+    public Charge create(ChargeRequest chargeCreateRequest) {
+        Charge charge = chargeMapper.toCharge(chargeCreateRequest);
         return chargeRepository.save(charge);
     }
 
@@ -80,9 +79,9 @@ public class ChargeService {
     public void deleteAll(){
         chargeRepository.deleteAll();
     }
-    public Charge updateById(String id, ChargeUpdateRequest chargeUpdateRequest) {
+    public Charge updateById(String id, ChargeRequest chargeRequest) {
         Charge charge = getById(id);
-        chargeMapper.mapUpdateCharge(charge, chargeUpdateRequest);
+        chargeMapper.mapCharge(charge, chargeRequest);
         return chargeRepository.save(charge);
     }
 
