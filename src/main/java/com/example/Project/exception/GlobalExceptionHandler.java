@@ -7,6 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.MethodNotAllowedException;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.security.core.AuthenticationException;
+
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -48,7 +52,47 @@ public class GlobalExceptionHandler {
                 .message(exception.getMessage())
                 .build();
 
-        return  ResponseEntity.badRequest().body(apiResponse);
+        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+    }
+
+    @ExceptionHandler(MethodNotAllowedException.class)
+    public ResponseEntity<ApiResponse<Void>> handleMethodNotAllowed(MethodNotAllowedException exception) {
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .code(HttpStatus.METHOD_NOT_ALLOWED.value())
+                .message(exception.getMessage())
+                .build();
+
+        return  ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(apiResponse);
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleNotFound(NoHandlerFoundException exception) {
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .code(HttpStatus.NOT_FOUND.value())
+                .message(exception.getMessage())
+                .build();
+
+        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleUnauthorized(AuthenticationException exception) {
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .code(HttpStatus.UNAUTHORIZED.value())
+                .message(exception.getMessage())
+                .build();
+
+        return  ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiResponse);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<Void>> handleException(Exception exception) {
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .message(exception.getMessage())
+                .build();
+
+        return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiResponse);
     }
 
 }

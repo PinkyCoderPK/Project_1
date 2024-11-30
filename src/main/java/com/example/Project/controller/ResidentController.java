@@ -1,9 +1,12 @@
 package com.example.Project.controller;
 
 
+import com.example.Project.dto.request.charge.ChargeSearchRequest;
 import com.example.Project.dto.request.resident.ResidentRequest;
+import com.example.Project.dto.request.resident.ResidentSearchRequest;
 import com.example.Project.dto.response.ApiResponse;
 import com.example.Project.dto.response.ResidentResponse;
+import com.example.Project.entity.Charge;
 import com.example.Project.entity.Resident;
 import com.example.Project.mapper.ResidentMapper;
 import com.example.Project.service.ResidentService;
@@ -89,4 +92,12 @@ public class ResidentController {
                 .build();
     }
 
+    @GetMapping("/search")
+    public ApiResponse<List<Resident>> search(@RequestBody @Valid ResidentSearchRequest request) {
+        return ApiResponse.<List<Resident>>builder()
+                .code(HttpStatus.OK.value())
+                .message("Thành công")
+                .result(residentService.search(request))
+                .build();
+    }
 }

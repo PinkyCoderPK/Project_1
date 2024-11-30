@@ -5,6 +5,7 @@ import com.example.Project.dto.request.charge.ChargeSearchRequest;
 import com.example.Project.entity.Charge;
 import com.example.Project.mapper.ChargeMapper;
 import com.example.Project.repository.ChargeRepository;
+import com.example.Project.utils.PredicateBuilder;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -33,6 +34,9 @@ public class ChargeService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private PredicateBuilder predicateBuilder;
+
     public Charge create(ChargeRequest chargeCreateRequest) {
         Charge charge = chargeMapper.toCharge(chargeCreateRequest);
         return chargeRepository.save(charge);
@@ -46,28 +50,11 @@ public class ChargeService {
         return chargeRepository.findAll();
     }
 
-    public List<Predicate> createPredicates(ChargeSearchRequest request, CriteriaBuilder criteriaBuilder, Root<Charge> root) {
-        List<Predicate> predicates = new ArrayList<>();
-        for(Field field : ChargeSearchRequest.class.getDeclaredFields()){
-            field.setAccessible(true);
-            try{
-                Object value = field.get(request);
-                if(value != null){
-                    predicates.add(criteriaBuilder.equal(root.get(field.getName()), value));
-                }
-            }
-            catch(IllegalAccessException e){
-                throw new RuntimeException("Thất bại trong truy cập trường: " + field.getName());
-            }
-        }
-        return predicates;
-    }
-
     public List<Charge> search(@Valid ChargeSearchRequest request) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Charge> criteriaQuery = criteriaBuilder.createQuery(Charge.class);
         Root<Charge> root = criteriaQuery.from(Charge.class);
-        List<Predicate> predicates = createPredicates(request, criteriaBuilder, root);
+        List<Predicate> predicates = predicateBuilder.createPredicatesToSearch(request, criteriaBuilder, root);
         criteriaQuery.select(root).where(predicates.toArray(new Predicate[0]));
         return  entityManager.createQuery(criteriaQuery).getResultList();
     }
