@@ -20,11 +20,11 @@ public class ApartmentChargeRequest {
 
     @Builder.Default
     @PositiveOrZero(message = "Số lượng phải là số không âm")
-    BigDecimal unitQuantity =  BigDecimal.ZERO;;
+    BigDecimal unitQuantity =  BigDecimal.ZERO;
 
     @Builder.Default
     @PositiveOrZero(message = "Số tiền đã thanh toán phải là số không âm")
-    BigDecimal amountPaid =  BigDecimal.ZERO;;
+    BigDecimal amountPaid =  BigDecimal.ZERO;
 
     Enums.PaymentMethod paymentMethod;
 }

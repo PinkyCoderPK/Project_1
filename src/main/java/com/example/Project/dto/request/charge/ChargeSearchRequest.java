@@ -11,9 +11,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ChargeSearchRequest {
 
-    @NotNull(message = "Tên phí không được để trống")
     String chargeName;
-
     Enums.ChargeType type;
     String description;
     Double unitAmount; // Phí/Đơn vị

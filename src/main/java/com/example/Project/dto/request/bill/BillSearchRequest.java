@@ -17,7 +17,7 @@ public class BillSearchRequest {
 
     @PositiveOrZero(message = "Số tiền đã thanh toán phải là số không âm")
     BigDecimal totalAmountPaid;
-    LocalDateTime month;
+    LocalDateTime monthYear;
     Enums.BillStatus status;
     Enums.PaymentMethod paymentMethod;
 }

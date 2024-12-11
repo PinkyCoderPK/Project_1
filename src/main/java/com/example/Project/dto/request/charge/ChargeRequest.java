@@ -22,8 +22,8 @@ public class ChargeRequest {
 
     String description;
 
-    @NotNull(message = "Đon giá phí không được để trống")
-    Double unitAmount; // Phí/Đơn vị
+    @Builder.Default
+    Double unitAmount = (double) 0; // Phí/Đơn vị
 
     @NotNull(message = "Đon vị phí không được để trống")
     String unitMeasurement; // Đơn vị đo lường

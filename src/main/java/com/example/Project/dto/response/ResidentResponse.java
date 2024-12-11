@@ -13,7 +13,7 @@ public class ResidentResponse {
     String id;
     String apartmentId;
     String apartmentName;
-    String username;
+    String residentName;
     Enums.ResidentRole role;
     String phoneNumber;
     LocalDate birthday;

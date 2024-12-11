@@ -27,7 +27,7 @@ public class BillRequest {
     BigDecimal totalAmountPaid = BigDecimal.ZERO;
 
     @NotNull(message = "Tháng thu phí không được để trống")
-    LocalDateTime month;
+    LocalDateTime monthYear;
 
     @Builder.Default
     Enums.BillStatus status = Enums.BillStatus.UNPAID; // Còn thiếu / Trả đủ

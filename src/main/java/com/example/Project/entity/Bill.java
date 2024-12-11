@@ -28,7 +28,7 @@ public class Bill {
     BigDecimal totalPaymentAmount;
     BigDecimal totalAmountPaid;
     BigDecimal totalAmountDue;
-    LocalDateTime month;
+    LocalDateTime monthYear;
     Enums.BillStatus status; // Còn thiếu / Trả đủ
     Enums.PaymentMethod paymentMethod; // Tiền mặt / Chuyển khoản / Quét thẻ
     LocalDateTime createAt;
