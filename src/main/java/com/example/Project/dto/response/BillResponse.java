@@ -1,15 +1,12 @@
 package com.example.Project.dto.response;
 
-import com.example.Project.entity.Apartment;
-import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.enums.Enums;
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data

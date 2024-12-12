@@ -1,17 +1,14 @@
 package com.example.Project.controller;
 
 
-import com.example.Project.dto.request.charge.ChargeSearchRequest;
 import com.example.Project.dto.request.resident.ResidentRequest;
 import com.example.Project.dto.request.resident.ResidentSearchRequest;
 import com.example.Project.dto.response.ApiResponse;
 import com.example.Project.dto.response.ResidentResponse;
-import com.example.Project.entity.Charge;
 import com.example.Project.entity.Resident;
 import com.example.Project.mapper.ResidentMapper;
 import com.example.Project.service.ResidentService;
 import jakarta.validation.Valid;
-
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;

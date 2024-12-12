@@ -1,13 +1,10 @@
 package com.example.Project.controller;
 
 
-
 import com.example.Project.dto.request.bill.BillRequest;
 import com.example.Project.dto.request.bill.BillSearchRequest;
-import com.example.Project.dto.response.ApartmentChargeForBillResponse;
 import com.example.Project.dto.response.ApiResponse;
 import com.example.Project.dto.response.BillResponse;
-import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.entity.Bill;
 import com.example.Project.mapper.ApartmentChargeMapper;
 import com.example.Project.mapper.BillMapper;

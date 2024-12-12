@@ -1,10 +1,8 @@
 package com.example.Project.service;
 
-import com.example.Project.dto.request.charge.ChargeSearchRequest;
 import com.example.Project.dto.request.resident.ResidentRequest;
 import com.example.Project.dto.request.resident.ResidentSearchRequest;
 import com.example.Project.entity.Apartment;
-import com.example.Project.entity.Charge;
 import com.example.Project.entity.Resident;
 import com.example.Project.mapper.ResidentMapper;
 import com.example.Project.repository.ResidentRepository;
