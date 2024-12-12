@@ -8,10 +8,10 @@ import lombok.experimental.FieldDefaults;
 import java.time.LocalDateTime;
 
 
-@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ChargeRequest {
     @NotNull(message = "Tên phí không được để trống")
