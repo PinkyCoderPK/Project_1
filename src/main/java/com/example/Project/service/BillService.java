@@ -6,7 +6,6 @@ import com.example.Project.entity.ApartmentCharge;
 import com.example.Project.entity.Bill;
 import com.example.Project.mapper.ApartmentChargeMapper;
 import com.example.Project.mapper.BillMapper;
-import com.example.Project.repository.ApartmentChargeRepository;
 import com.example.Project.repository.BillRepository;
 import com.example.Project.utils.PredicateBuilder;
 import jakarta.persistence.EntityManager;
@@ -32,9 +31,6 @@ public class BillService {
 
     @Autowired
     private BillMapper billMapper;
-
-    @Autowired
-    private ApartmentChargeRepository apartmentChargeRepository;
 
     @Autowired
     PredicateBuilder predicateBuilder;

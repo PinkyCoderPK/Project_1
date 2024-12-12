@@ -22,6 +22,7 @@ public class ResidentRequest {
     @NotNull(message = "Tên cư dân không được để trống")
     String residentName;
 
+    @Builder.Default
     Enums.ResidentRole role = Enums.ResidentRole.NON_OWNER;
 
     @Pattern(regexp = "^[0-9]{10}$", message = "Định dạng số điện thoại không hợp lệ")

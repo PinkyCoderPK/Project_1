@@ -1,8 +1,6 @@
 package com.example.Project.dto.request.resident;
 
 import com.example.Project.enums.Enums;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;

@@ -1,7 +1,6 @@
 package com.example.Project.dto.request.apartmentCharge;
 
 import com.example.Project.enums.Enums;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

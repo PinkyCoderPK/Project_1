@@ -1,7 +1,6 @@
 package com.example.Project.dto.request.charge;
 
 import com.example.Project.enums.Enums;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
